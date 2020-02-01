@@ -148,10 +148,11 @@ namespace GGJ2020
 
             }
         }
-
+        Transform target;
         Transform FindClosestBuilding()
         {
-            /*//Otherwise Find the closest building#
+            
+            //Otherwise Find the closest building#
             float temp = 2000;
             foreach (GameObject building in PlayerManager.instance.bases)
             {
@@ -162,8 +163,9 @@ namespace GGJ2020
                     temp = DistanceToBuilding;
                 }
             }
-            return target;*/
+            return target;
         }
+
         EnemyState GetState()
         {
             return m_state;
