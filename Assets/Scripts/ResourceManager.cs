@@ -36,8 +36,12 @@ namespace GGJ2020
         public struct ResourceCostProfile
         {
             public ResourceTypes m_type;
-            public int m_delta; // Positive if adding to stockpile, negative if removing from, ALWAYS.
-            public bool m_viabilityBool; // Used dependant on context, for whether a resource cost is available, etc.
+
+            [Tooltip("Positive if adding to stockpile, negative if removing from, ALWAYS.")]
+            public int m_delta;
+
+            [Tooltip("Used dependant on context, for whether a resource cost is available, etc.")]
+            public bool m_viabilityBool;
         }
 
         [System.Serializable]
