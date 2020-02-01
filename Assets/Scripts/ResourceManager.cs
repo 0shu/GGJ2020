@@ -33,17 +33,47 @@ namespace GGJ2020
         public static ResourceManager s_instance;
 
         [System.Serializable]
-        public class BuildTypeToInt
+        public struct ResourceCostProfile
         {
-            public BuildingTypes bT;
-            public int[] value;
+            public ResourceTypes m_type;
+            public int m_delta; // Positive if adding to stockpile, negative if removing from, ALWAYS.
+            public bool m_viabilityBool; // Used dependant on context, for whether a resource cost is available, etc.
         }
-        public BuildTypeToInt[] bti;
+
+        [System.Serializable]
+        public class BuildingYieldProfile
+        {
+            public BuildingTypes m_type;
+            public ResourceCostProfile[] m_deltas;
+        }
+        [SerializeField] BuildingYieldProfile[] m_initialBuildingYields;
+
+        public class RuntimeBuildingYieldProfile
+        {
+            public BuildingTypes m_type;
+            public Dictionary<ResourceTypes, float> m_currentDeltas = new Dictionary<ResourceTypes, float>();
+            public Dictionary<ResourceTypes, float> m_maxDeltas = new Dictionary<ResourceTypes, float>();
+            public bool m_maxed = true; // Runtime bool for whether a building has all inputs it needs.
+        }
+
+        [System.Serializable]
+        public class BuildingCostProfile
+        {
+            public BuildingTypes m_buildingType;
+            public ResourceCostProfile[] m_buildingCost;
+        }
+        [SerializeField] BuildingCostProfile[] m_buildingCosts;
 
         [SerializeField] int[] m_buildingCounts = new int[BuildingTypeCount];
         List<Building>[] m_activeBuildings = new List<Building>[BuildingTypeCount];
 
-        public Dictionary<BuildingTypes, int[]> m_buildingYieldTypes = new Dictionary<BuildingTypes, int[]>();
+        private class InternalBYP
+        {
+            public BuildingTypes m_buildingType;
+            public int[] m_deltas = new int[ResourceTypeCount];
+        }
+
+        InternalBYP[] m_buildingYields = new InternalBYP[BuildingTypeCount];
         float[] m_buildingActivationRatios = new float[BuildingTypeCount]; // What portion of the building's costs/yields are being used/created.
 
         int[] m_resources       = new int[ResourceTypeCount];
@@ -71,9 +101,22 @@ namespace GGJ2020
         // Start is called before the first frame update
         void Start()
         {
-            foreach(var variable in bti)
+            // Reset building yields, transfer initial to current.
+            for (int j = 0; j < BuildingTypeCount; j++)
             {
-                m_buildingYieldTypes[variable.bT] = variable.value;
+                m_buildingYields[j] = new InternalBYP();
+                m_buildingYields[j].m_buildingType = (BuildingTypes)j;
+                {
+                    for (int i = 0; i < ResourceTypeCount; i++) { m_buildingYields[j].m_deltas[i] = 0; }
+                }
+            }
+
+            foreach (var variable in m_initialBuildingYields)
+            {
+                foreach (var resProf in variable.m_deltas)
+                {
+                    m_buildingYields[(int)variable.m_type].m_deltas[(int)resProf.m_type] = resProf.m_delta;
+                }
             }
 
             StartCoroutine("ResourceTick");
@@ -91,7 +134,7 @@ namespace GGJ2020
                     m_maxPosDeltaR[i] = 0;
                     for (int j = 0; j < BuildingTypeCount; j++)
                     {
-                        int delta = m_buildingYieldTypes[(BuildingTypes)j][i] * m_buildingCounts[j];
+                        int delta = m_buildingYields[j].m_deltas[i] * m_buildingCounts[j];
                         if (delta > 0) { m_maxPosDeltaR[i] += delta; }
                         else { m_maxNegDeltaR[i] += delta; }
                     }
@@ -112,7 +155,7 @@ namespace GGJ2020
                         float neg = 0;
                         for (int j = 0; j < BuildingTypeCount; j++)
                         {
-                            float delta = m_buildingYieldTypes[(BuildingTypes)j][i] * m_buildingCounts[j] * m_buildingActivationRatios[j];
+                            float delta = m_buildingYields[j].m_deltas[i] * m_buildingCounts[j] * m_buildingActivationRatios[j];
                             if (delta > 0.0f) { pos += delta; }
                             else { neg -= delta; }
                         }
@@ -132,7 +175,7 @@ namespace GGJ2020
                             float fulfilmentRatio = neg / (m_resources[i] + pos);
                             for (int j = 0; j < BuildingTypeCount; j++)
                             {
-                                if (m_buildingYieldTypes[(BuildingTypes)j][i] < 0 && fulfilmentRatio < m_buildingActivationRatios[j])
+                                if (m_buildingYields[j].m_deltas[i] < 0 && fulfilmentRatio < m_buildingActivationRatios[j])
                                 {
                                     m_buildingActivationRatios[j] = fulfilmentRatio;
                                 }
@@ -196,6 +239,58 @@ namespace GGJ2020
 
             if (!foundAny) { return null; }
             else { return closestYet; }
+        }
+
+        static public int GetResourceCount(ResourceTypes type)
+        {
+            return s_instance.m_resources[(int)type];
+        }
+
+        static public void ChangeResource(ResourceTypes type, int delta)
+        {
+            s_instance.m_resources[(int)type] = Mathf.Max(0, s_instance.m_resources[(int)type] + delta);
+        }
+
+        static public BuildingCostProfile GetCostProfile(BuildingTypes type)
+        {
+
+            BuildingCostProfile output = new BuildingCostProfile();
+            output.m_buildingType = type;
+
+            bool found = false;
+            for (int k = 0; k < s_instance.m_buildingCosts.Length && !found; k++)
+            {
+                if (s_instance.m_buildingCosts[k].m_buildingType == type)
+                {
+                    found = true;
+                    output.m_buildingCost = new ResourceCostProfile[s_instance.m_buildingCosts[k].m_buildingCost.Length];
+                    for (int l = 0; l < s_instance.m_buildingCosts[k].m_buildingCost.Length; l++)
+                    {
+                        output.m_buildingCost[l] = s_instance.m_buildingCosts[k].m_buildingCost[l];
+                        output.m_buildingCost[l].m_viabilityBool = (-output.m_buildingCost[l].m_delta <= GetResourceCount(output.m_buildingCost[l].m_type));
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        static public RuntimeBuildingYieldProfile GetCurrentYields(BuildingTypes type)
+        {
+            RuntimeBuildingYieldProfile output = new RuntimeBuildingYieldProfile();
+            output.m_type = type;
+            if (s_instance.m_buildingActivationRatios[(int)type] < 1.0f) { output.m_maxed = false; }
+            
+            for (int i = 0; i < ResourceTypeCount; i++)
+            {
+                if (s_instance.m_buildingYields[(int)type].m_deltas[i] != 0.0f)
+                {
+                    output.m_currentDeltas[(ResourceTypes)i] = s_instance.m_buildingYields[(int)type].m_deltas[i] * s_instance.m_buildingActivationRatios[(int)type];
+                    output.m_maxDeltas[(ResourceTypes)i] = s_instance.m_buildingYields[(int)type].m_deltas[i];
+                }
+            }
+
+            return output;
         }
     }
 }
