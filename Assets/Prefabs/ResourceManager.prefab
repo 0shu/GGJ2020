@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8010787395839905828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8010787395839905830}
+  - component: {fileID: 8010787395839905831}
+  m_Layer: 0
+  m_Name: ResourceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8010787395839905830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8010787395839905828}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8010787395839905831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8010787395839905828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4dbcc0f73cc55548918104a83e88b8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_initialBuildingYields:
+  - m_type: 0
+    m_deltas:
+    - m_type: 3
+      m_delta: 6
+      m_viabilityBool: 0
+  - m_type: 1
+    m_deltas:
+    - m_type: 3
+      m_delta: -1
+      m_viabilityBool: 0
+    - m_type: 4
+      m_delta: 4
+      m_viabilityBool: 0
+  - m_type: 2
+    m_deltas:
+    - m_type: 3
+      m_delta: -1
+      m_viabilityBool: 0
+    - m_type: 4
+      m_delta: -2
+      m_viabilityBool: 0
+    - m_type: 5
+      m_delta: 3
+      m_viabilityBool: 0
+  - m_type: 3
+    m_deltas:
+    - m_type: 3
+      m_delta: -3
+      m_viabilityBool: 0
+    - m_type: 4
+      m_delta: -3
+      m_viabilityBool: 0
+    - m_type: 5
+      m_delta: -3
+      m_viabilityBool: 0
+    - m_type: 6
+      m_delta: 5
+      m_viabilityBool: 0
+  - m_type: 4
+    m_deltas:
+    - m_type: 3
+      m_delta: -1
+      m_viabilityBool: 0
+    - m_type: 6
+      m_delta: -3
+      m_viabilityBool: 0
+    - m_type: 7
+      m_delta: 1
+      m_viabilityBool: 0
+  m_buildingCosts:
+  - m_buildingType: 0
+    m_buildingCost:
+    - m_type: 0
+      m_delta: -5
+      m_viabilityBool: 0
+    - m_type: 2
+      m_delta: -5
+      m_viabilityBool: 0
+  - m_buildingType: 1
+    m_buildingCost:
+    - m_type: 0
+      m_delta: -10
+      m_viabilityBool: 0
+    - m_type: 2
+      m_delta: -5
+      m_viabilityBool: 0
+  - m_buildingType: 2
+    m_buildingCost:
+    - m_type: 0
+      m_delta: -3
+      m_viabilityBool: 0
+    - m_type: 1
+      m_delta: -8
+      m_viabilityBool: 0
+    - m_type: 2
+      m_delta: -3
+      m_viabilityBool: 0
+  - m_buildingType: 3
+    m_buildingCost:
+    - m_type: 0
+      m_delta: -8
+      m_viabilityBool: 0
+    - m_type: 1
+      m_delta: -8
+      m_viabilityBool: 0
+    - m_type: 2
+      m_delta: -2
+      m_viabilityBool: 0
+    - m_type: 5
+      m_delta: -5
+      m_viabilityBool: 0
+  - m_buildingType: 4
+    m_buildingCost:
+    - m_type: 2
+      m_delta: -10
+      m_viabilityBool: 0
+    - m_type: 6
+      m_delta: -5
+      m_viabilityBool: 0
+  m_buildingCounts: 0000000000000000000000000000000000000000
+  m_tick: 10

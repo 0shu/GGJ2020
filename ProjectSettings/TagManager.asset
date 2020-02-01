@@ -4,6 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Ground
   - Bucket
   - Hammer
@@ -11,6 +12,9 @@ TagManager:
   - Building
   - Wood
   - Resource
+=======
+  - BASE
+>>>>>>> master
   layers:
   - Default
   - TransparentFX
