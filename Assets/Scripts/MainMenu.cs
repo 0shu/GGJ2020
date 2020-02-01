@@ -5,15 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public string m_CreditsName = "CREDITS";
+    public string m_MainName = "MAIN";
+
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(m_MainName);
     }
     public void PlatCredits()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(m_CreditsName);
     }
-   
+
     public void Quit()
     {
         Debug.Log("Quit!");
