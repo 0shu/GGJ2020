@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 565841683207645574}
   - component: {fileID: 3138717597968980751}
   m_Layer: 0
-  m_Name: Sphere
-  m_TagString: Untagged
+  m_Name: pickaxe
+  m_TagString: Pickaxe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6070867029464504198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.22052455, y: 0.914, z: 1.642}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.1402183, y: 0.653005, z: -1.9459851}
+  m_LocalScale: {x: 0.175, y: 0.175, z: 0.17499998}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0

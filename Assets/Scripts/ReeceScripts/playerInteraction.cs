@@ -4,20 +4,20 @@ using UnityEngine;
 
 namespace GGJ2020
 {
+    public enum Tool { Pickaxe, Hammer, Bucket };
     public class playerInteraction : MonoBehaviour
     {
-        enum Tool {Pickaxe, Hammer, Bucket};
-        Tool currentTool;
+        public Tool currentTool;
 
-        public GameObject pickaxe;
-        public GameObject bucket;
-        public GameObject hammer;
+        public List<GameObject> toolList = new List<GameObject>();
+        buildingDetector detector;
 
         // Start is called before the first frame update
         void Start()
         {
-            Tool currentTool;
+            detector = GetComponent<buildingDetector>();
             currentTool = Tool.Pickaxe;
+            Interaction();
         }
 
         // Update is called once per frame
@@ -30,35 +30,35 @@ namespace GGJ2020
             }
             if (Input.GetKeyDown("2"))
             {
-                currentTool = Tool.Bucket;
+                currentTool = Tool.Hammer;
                 Interaction();
             }
             if (Input.GetKeyDown("3"))
             {
-                currentTool = Tool.Hammer;
-                Interaction();
+                currentTool = Tool.Bucket;
+                Interaction();              
+            }
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                if(detector.res != null)
+                {
+                    detector.res.Gather();
+                }
+                
             }
         }
 
         void Interaction()
         {
-            switch (currentTool)
+            toolList[(int)currentTool].SetActive(true);
+
+            for(int i = 0; i < toolList.Count; i++)
             {
-                case Tool.Pickaxe:
-                    Instantiate(pickaxe);
-                    Debug.Log("Pickaxe");
-                    break;
-                case Tool.Bucket:
-                    Instantiate(bucket);
-                    Debug.Log("Bucket");
-                    break;
-                case Tool.Hammer:
-                    Instantiate(hammer);
-                    Debug.Log("Hammer");
-                    break;
-                default:
-                    Debug.Log("NOTHING");
-                    break;
+                if(i != (int)currentTool)
+                {
+                    toolList[i].SetActive(false);
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ namespace GGJ2020
 
         float xRotation = 0f;
 
-        void start()
+        void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
