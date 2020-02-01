@@ -14,7 +14,6 @@ public class TestCamera : MonoBehaviour
     private bool isSprinting = false;
     private float yRot;
 
-    private Animator anim;
     private Rigidbody rigidBody;
 
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
@@ -70,8 +69,6 @@ public class TestCamera : MonoBehaviour
             isSprinting = false;
         }
 
-        anim.SetBool("isMoving", isMoving);
-        anim.SetBool("isSprinting", isSprinting);
 
 
         if (axes == RotationAxes.MouseXAndY)
@@ -168,7 +165,7 @@ public class TestCamera : MonoBehaviour
         originalRotation = transform.localRotation;
 
         playerSpeed = walkSpeed;
-        anim = GetComponent<Animator>();
+
         rigidBody = GetComponent<Rigidbody>();
     }
     public static float ClampAngle(float angle, float min, float max)

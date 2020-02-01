@@ -8,99 +8,162 @@ namespace GGJ2020
 {
     public class EnemyController : MonoBehaviour
     {
-        public float lookRadius = 10f;
-        public float lookInterval = 10f;
-        float timeWaited = 0;
-        bool triggered = false;
+        [SerializeField]
+        float checkInterval;
 
-        Transform target;
-        NavMeshAgent agent;
+        public enum EnemyState
+        {
+            Idle,
+            AttackingPlayer,
+            AttackingBuilding,
+            MovingToLocation
+        }
+
         EnemyState m_state = EnemyState.Idle;
 
+        public float lookRadius = 10f;
+        public float lookInterval = 10f;
+        public float stopDistance = 2.0f;
+
+        private Transform player;
+
+        Vector3 m_currentTarget;
+        Vector3 m_longTermTarget;
+        bool m_objectiveCheckTrigger = true;
+        NavMeshAgent m_agent;
+        bool m_aggressive = false;
+
+        IEnumerator m_objectiveCheck()
+        {
+            yield return new WaitForSeconds(checkInterval);
+            m_objectiveCheckTrigger = true;
+            print("Triggered enemycheck");
+        }
         void Start()
         {
-            target = PlayerManager.instance.player.transform;
-            agent = GetComponent<NavMeshAgent>();
-
-        }
+            player = PlayerManager.instance.player.transform;
+            m_agent = GetComponent<NavMeshAgent>();
+            m_longTermTarget = this.transform.position;
+            m_currentTarget = m_longTermTarget;
+    }
 
         void Update()
         {
-            if(triggered)
+            
+
+
+
+            /*//Calculate distance to player
+            float distancetoPlayer = Vector3.Distance(Player.position, transform.position);
+            //If its nearby go to them
+            if (distancetoPlayer <= lookRadius)
             {
-                timeWaited += Time.deltaTime;
-
-                if (timeWaited > lookInterval)
-                {
-                    timeWaited = 0;
-                    Search();
-
-                }
-
-                float distance = Vector3.Distance(target.position, transform.position);
-                agent.SetDestination(target.position);
-
-                if (distance <= agent.stoppingDistance)
+                Debug.Log("Going to Player");
+                m_agent.SetDestination(Player.position);
+                //If you are close to the player (update rotation)
+                if (distancetoPlayer <= m_agent.stoppingDistance)
                 {
                     FaceTarget();
-                    //Attack the target
-                    //Face the target
                 }
-            }
-        }
-
-        public void TriggerSearch(Transform loc)
-        {
-            triggered = true;
-            
-            if (Search() == false)
-            {
-                target = loc;
-            }
-        }
-
-        public void StopSearch()
-        {
-            triggered = false;
-            target = gameObject.transform;
-        }
-
-        bool Search()
-        {
-            float distance;
-            Transform player = PlayerManager.instance.player.transform;
-
-            //PLAYER
-            distance = Vector3.Distance(player.position, transform.position);
-            if (distance <= lookRadius)
-            {
-                target = player;
-                return true;
             }
             else
             {
-                distance = lookRadius;
-                //BUILDINGS
-                foreach(GameObject building in PlayerManager.instance.bases)
+                //Check if you are in the range of closest building
+                float DistancetoClosestBuilding = Vector3.Distance(Closestbuilding.position, transform.position);
+                
+                if (DistancetoClosestBuilding <= lookRadius)
                 {
-                    float temp = Vector3.Distance(building.transform.position, transform.position);
-                    if(temp < distance)
+                    Debug.Log("Going to Building");
+                    Debug.Log(target.position);
+
+                    agent.SetDestination(target.position);
+                    Debug.Log(agent.SetDestination(target.position));
+                    
+                }
+                else
+                {
+                    FindClosestBuilding();
+                }
+
+            }*/
+        }
+
+        void FixedUpdate()
+        {
+            if (m_objectiveCheckTrigger)
+            {
+                float sqrDistanceToPlayer = (player.position - transform.position).sqrMagnitude;
+                if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
+                {
+                    m_state = EnemyState.AttackingPlayer;
+                    m_currentTarget = player.position;
+                }
+                else if (((FindClosestBuilding().position - transform.position).sqrMagnitude) <= (lookRadius * lookRadius))
+                {
+                    m_state = EnemyState.AttackingBuilding;
+                    m_currentTarget = FindClosestBuilding().position;
+                    m_agent.SetDestination(m_currentTarget);
+                }
+                else
+                {
+                    if (m_aggressive)
                     {
-                        player = building.transform;
+                        m_state = EnemyState.MovingToLocation;
+                        m_currentTarget = m_longTermTarget;
+                        m_agent.SetDestination(m_currentTarget);
+                    }
+                    else
+                    {
+                        m_state = EnemyState.Idle;
+                        m_longTermTarget = this.transform.position;
+                        m_currentTarget = m_longTermTarget;
+                        m_agent.SetDestination(m_currentTarget);
                     }
                 }
 
-                //Check if closest building is actually within the radius once more
-                distance = Vector3.Distance(player.position, transform.position);
-                if (distance <= lookRadius)
-                {
-                    target = player;
-                    return true;
-                }
+
+                m_objectiveCheckTrigger = false;
+                StartCoroutine("m_objectiveCheck");
             }
-            return false;
+
+            switch (m_state)
+            {
+                case EnemyState.AttackingPlayer:
+                    m_currentTarget = player.position;
+                    m_agent.SetDestination(m_currentTarget);
+                    break;
+                case EnemyState.AttackingBuilding:
+                    break;
+                case EnemyState.MovingToLocation:
+                    if ((transform.position - m_longTermTarget).sqrMagnitude <= (stopDistance * stopDistance))
+                    {
+                        m_aggressive = false;
+                        StopCoroutine("m_objectiveCheck");
+                        m_objectiveCheckTrigger = true;
+                    }
+                    break;
+                case EnemyState.Idle:
+                default:
+                    break;
+
+            }
         }
 
+        Transform FindClosestBuilding()
+        {
+            /*//Otherwise Find the closest building#
+            float temp = 2000;
+            foreach (GameObject building in PlayerManager.instance.bases)
+            {
+                float DistanceToBuilding = Vector3.Distance(building.transform.position, transform.position);
+                if (DistanceToBuilding < temp)
+                {
+                    target = building.transform;
+                    temp = DistanceToBuilding;
+                }
+            }
+            return target;*/
+        }
         EnemyState GetState()
         {
             return m_state;
@@ -108,24 +171,16 @@ namespace GGJ2020
 
         void FaceTarget()
         {
-            Vector3 direction = (target.position - transform.position).normalized;
+            Vector3 direction = (m_currentTarget - transform.position).normalized;
             Quaternion LookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, LookRotation, Time.deltaTime * 5f);
-
         }
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, lookRadius);
-
         }
     }
 
-    enum EnemyState {
-        Idle,
-        AttackingPlayer,
-        AttackingBuilding,
-        GoToLocation
-    }
-
 }
+

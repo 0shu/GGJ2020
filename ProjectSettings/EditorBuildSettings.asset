@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Oskar_Scene.unity
+    guid: 8fe579f191cd57a4c857e4cc62f87220
   m_configObjects: {}
