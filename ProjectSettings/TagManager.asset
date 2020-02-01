@@ -4,6 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Ground
+  - Bucket
+  - Hammer
+  - Pickaxe
+  - Building
+  - Wood
+  - Resource
   - BASE
   - Enemy
   - Turret
@@ -16,7 +23,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 

@@ -15,8 +15,8 @@ namespace GGJ2020
 
     public enum ResourceTypes
     {
-        Bricks = 0,
-        Wood,
+        Wood = 0,
+        Bricks,
         Steel,
         Power,
         Water,
@@ -31,13 +31,18 @@ namespace GGJ2020
         public const int ResourceTypeCount = 8;
 
         public static ResourceManager s_instance;
+        public InventoryDisplay m_inventoryDisplay;
 
         [System.Serializable]
         public struct ResourceCostProfile
         {
             public ResourceTypes m_type;
-            public int m_delta; // Positive if adding to stockpile, negative if removing from, ALWAYS.
-            public bool m_viabilityBool; // Used dependant on context, for whether a resource cost is available, etc.
+
+            [Tooltip("Positive if adding to stockpile, negative if removing from, ALWAYS.")]
+            public int m_delta;
+
+            [Tooltip("Used dependant on context, for whether a resource cost is available, etc.")]
+            public bool m_viabilityBool;
         }
 
         [System.Serializable]
@@ -88,9 +93,9 @@ namespace GGJ2020
         void Awake()
         {
             if (s_instance == null) { s_instance = this; }
-            else { return; }
-            
-            m_trigger = false;
+            else { print("Warning! Multiple ResourceManager instances created!"); return; }
+
+            m_trigger = true;
 
             for (int j = 0; j < BuildingTypeCount; j++)
             {
@@ -101,6 +106,8 @@ namespace GGJ2020
         // Start is called before the first frame update
         void Start()
         {
+            m_inventoryDisplay = InventoryDisplay.s_instance;
+
             // Reset building yields, transfer initial to current.
             for (int j = 0; j < BuildingTypeCount; j++)
             {
@@ -118,8 +125,6 @@ namespace GGJ2020
                     m_buildingYields[(int)variable.m_type].m_deltas[(int)resProf.m_type] = resProf.m_delta;
                 }
             }
-
-            StartCoroutine("ResourceTick");
         }
 
         // Update is called once per frame
@@ -147,7 +152,7 @@ namespace GGJ2020
             
                 // Repeat until no limitations found.
                 bool foundLimiter = true; // Found a resource that will dip below zero this tick.
-                while (foundLimiter) {
+                for (int index = 0; index < 15 && foundLimiter; index++) {
                     foundLimiter = false;
                     for (int i = 0; i < ResourceTypeCount; i++)
                     {
@@ -159,12 +164,15 @@ namespace GGJ2020
                             if (delta > 0.0f) { pos += delta; }
                             else { neg -= delta; }
                         }
-                        
-                        int deltaFloor = (int)Mathf.Floor(pos - neg);
-                        if (m_resources[i] + deltaFloor >= 0)
+
+                        //int deltaFloor = (int)Mathf.Floor(pos - neg);
+                        float deltaTotal = pos - neg;
+                        //Debug.Log("Resource Check (" + i + "): Neg-" + neg + " Pos-" + pos + " Del-"+ deltaTotal);
+                        if (m_resources[i] + deltaTotal >= 0)
+                        //if (m_resources[i] + deltaFloor >= 0)
                         {
                             // Got enough, not a limiter.
-                            m_DeltaR[i] = deltaFloor;
+                            m_DeltaR[i] = (int)Mathf.Ceil(pos - neg);
                         }
                         else
                         {
@@ -172,7 +180,7 @@ namespace GGJ2020
                             m_DeltaR[i] = -m_resources[i];
                             m_resourceIsLimited[i] = true;
 
-                            float fulfilmentRatio = neg / (m_resources[i] + pos);
+                            float fulfilmentRatio = (m_resources[i] + pos) / neg;
                             for (int j = 0; j < BuildingTypeCount; j++)
                             {
                                 if (m_buildingYields[j].m_deltas[i] < 0 && fulfilmentRatio < m_buildingActivationRatios[j])
@@ -180,6 +188,8 @@ namespace GGJ2020
                                     m_buildingActivationRatios[j] = fulfilmentRatio;
                                 }
                             }
+
+                            Debug.Log("Loop " + index + ", Limited Resource (" + i + "): Neg-" + neg + " Ava-" + (m_resources[i] + pos) + " Rat-" + fulfilmentRatio);
                         }
                     }
                 }
@@ -190,8 +200,12 @@ namespace GGJ2020
                 }
                 for (int j = 0; j < BuildingTypeCount; j++)
                 {
-                    foreach (var building in m_activeBuildings[j]) { building.SetActivationRatio(m_buildingActivationRatios[j]); }
+                    for (int k = 0; k < m_activeBuildings[j].Count; k++) {
+                        m_activeBuildings[j][k].SetActivationRatio(m_buildingActivationRatios[j]);
+                    }
                 }
+
+                m_inventoryDisplay.UpdateValues(m_resources, m_maxPosDeltaR, m_maxNegDeltaR, m_DeltaR, m_resourceIsLimited);
 
                 StartCoroutine("ResourceTick");
             }
