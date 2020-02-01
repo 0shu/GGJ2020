@@ -243,18 +243,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4dbcc0f73cc55548918104a83e88b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bti:
-  - bT: 0
-    value: 0000000000000000000000000600000000000000000000000000000000000000
-  - bT: 1
-    value: 000000000000000000000000ffffffff04000000000000000000000000000000
-  - bT: 2
-    value: 000000000000000000000000fffffffffeffffff030000000000000000000000
-  - bT: 3
-    value: 000000000000000000000000fffffffffeffffffffffffff0300000000000000
-  - bT: 4
-    value: 000000000000000000000000ffffffff0000000000000000fbffffff01000000
+  m_initialBuildingYields:
+  - m_type: 0
+    m_deltas:
+    - m_type: 3
+      m_delta: 6
+      m_currentlyAvailable: 0
+  - m_type: 1
+    m_deltas:
+    - m_type: 3
+      m_delta: -1
+      m_currentlyAvailable: 0
+    - m_type: 4
+      m_delta: 4
+      m_currentlyAvailable: 0
+  - m_type: 2
+    m_deltas:
+    - m_type: 3
+      m_delta: -1
+      m_currentlyAvailable: 0
+    - m_type: 4
+      m_delta: -2
+      m_currentlyAvailable: 0
+    - m_type: 5
+      m_delta: 3
+      m_currentlyAvailable: 0
+  m_buildingCosts:
+  - m_buildingType: 0
+    m_buildingCost:
+    - m_type: 0
+      m_delta: 0
+      m_currentlyAvailable: 0
+    - m_type: 0
+      m_delta: 0
+      m_currentlyAvailable: 0
+    - m_type: 0
+      m_delta: 0
+      m_currentlyAvailable: 0
+  - m_buildingType: 0
+    m_buildingCost: []
   m_buildingCounts: 0000000000000000000000000000000000000000
+  m_buildingYields:
+  - m_buildingType: 0
+    m_deltas: 0000000000000000000000000000000000000000000000000000000000000000
+  - m_buildingType: 0
+    m_deltas: 0000000000000000000000000000000000000000000000000000000000000000
+  - m_buildingType: 0
+    m_deltas: 0000000000000000000000000000000000000000000000000000000000000000
+  - m_buildingType: 0
+    m_deltas: 0000000000000000000000000000000000000000000000000000000000000000
+  - m_buildingType: 0
+    m_deltas: 0000000000000000000000000000000000000000000000000000000000000000
   m_tick: 5
 --- !u!65 &1301843146
 BoxCollider:
