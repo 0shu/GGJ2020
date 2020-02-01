@@ -11,6 +11,7 @@ namespace GGJ2020
             if (gatherTool == player.currentTool)
             {
                 base.Gather();
+                base.Material(0);
                 print("hitting wood");
             }
         }

@@ -189,7 +189,7 @@ namespace GGJ2020
                                 }
                             }
 
-                            Debug.Log("Loop " + index + ", Limited Resource (" + i + "): Neg-" + neg + " Ava-" + (m_resources[i] + pos) + " Rat-" + fulfilmentRatio);
+                            //Debug.Log("Loop " + index + ", Limited Resource (" + i + "): Neg-" + neg + " Ava-" + (m_resources[i] + pos) + " Rat-" + fulfilmentRatio);
                         }
                     }
                 }
@@ -263,6 +263,7 @@ namespace GGJ2020
         static public void ChangeResource(ResourceTypes type, int delta)
         {
             s_instance.m_resources[(int)type] = Mathf.Max(0, s_instance.m_resources[(int)type] + delta);
+            s_instance.m_inventoryDisplay.UpdateValues(s_instance.m_resources, s_instance.m_maxPosDeltaR, s_instance.m_maxNegDeltaR, s_instance.m_DeltaR, s_instance.m_resourceIsLimited);
         }
 
         static public BuildingCostProfile GetCostProfile(BuildingTypes type)
