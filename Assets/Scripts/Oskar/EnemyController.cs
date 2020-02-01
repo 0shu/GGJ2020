@@ -16,7 +16,8 @@ namespace GGJ2020
             Idle,
             AttackingPlayer,
             AttackingBuilding,
-            MovingToLocation
+            MovingToLocation,
+            Death
         }
 
         EnemyState m_state = EnemyState.Idle;
@@ -94,12 +95,11 @@ namespace GGJ2020
             {
                 float sqrDistanceToPlayer = (player.position - transform.position).sqrMagnitude;
                 var nearestBuilding = ResourceManager.GetClosestActiveBuildingTo(transform.position);
-                print(nearestBuilding);
                 if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
                 {
                     m_state = EnemyState.AttackingPlayer;
                     m_currentTarget = player.position;
-                    print("Triggering player");
+
                 }
                 else if (nearestBuilding != null && ((nearestBuilding.transform.position - transform.position).sqrMagnitude) <= (lookRadius * lookRadius))
                 {
@@ -108,17 +108,17 @@ namespace GGJ2020
                     m_agent.SetDestination(new Vector3(nearestBuilding.transform.position.x,
                                                         0f,
                                                         nearestBuilding.transform.position.z));
-                    print("Triggering building");
+
                 }
                 else
                 {
-                    print("Triggering else");
+
                     if (m_aggressive)
                     {
                         m_state = EnemyState.MovingToLocation;
                         m_currentTarget = m_longTermTarget;
                         m_agent.SetDestination(m_currentTarget);
-                        print("Triggering aggressive");
+
                     }
                     else
                     {
@@ -197,6 +197,11 @@ namespace GGJ2020
         {
             m_aggressive = true;
             m_longTermTarget = destinationLocation;
+        }
+
+        public void Die()
+        {
+            Destroy(this.gameObject);
         }
     }
 
