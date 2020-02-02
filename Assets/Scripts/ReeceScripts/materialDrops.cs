@@ -71,7 +71,7 @@ namespace GGJ2020
                         
                         materialPickup item = materialCollect.GetComponent<materialPickup>();
 
-                        Vector3 dest = new Vector3(Random.Range(-2.0f, 2.0f), 0.0f, Random.Range(-2.0f, 2.0f));
+                        Vector3 dest = new Vector3(Random.Range(-2.0f, 2.0f), 0.25f, Random.Range(-2.0f, 2.0f));
                         dest += transform.position;
 
                         print("Moving spawned item to: " + dest.x + ", " + dest.y + ", " + dest.z);
