@@ -11,6 +11,7 @@ namespace GGJ2020
         [System.Serializable]
         public struct SpawnOption
         {
+            public ResourceTypes m_type;
             public GameObject m_prefab;
             public float m_weight;
         }
@@ -25,10 +26,10 @@ namespace GGJ2020
         //public float woodCounter;
         //public float brickCounter;
 
-        float m_totalWeight = 0.0f;
+        public float m_totalWeight = 0.0f;
 
         [SerializeField]
-        List<SpawnOption> m_options = new List<SpawnOption>();
+        public List<SpawnOption> m_options = new List<SpawnOption>();
         [SerializeField]
         int m_minSpawncount;
         [SerializeField]
@@ -70,7 +71,7 @@ namespace GGJ2020
                         
                         materialPickup item = materialCollect.GetComponent<materialPickup>();
 
-                        Vector3 dest = new Vector3(Random.Range(-2.0f, 2.0f), 0.0f, Random.Range(-2.0f, 2.0f));
+                        Vector3 dest = new Vector3(Random.Range(-2.0f, 2.0f), 0.25f, Random.Range(-2.0f, 2.0f));
                         dest += transform.position;
 
                         print("Moving spawned item to: " + dest.x + ", " + dest.y + ", " + dest.z);
