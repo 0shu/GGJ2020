@@ -15,6 +15,7 @@ TagManager:
   - Enemy
   - Turret
   - HealthBarImage
+  - Weapon
   layers:
   - Default
   - TransparentFX

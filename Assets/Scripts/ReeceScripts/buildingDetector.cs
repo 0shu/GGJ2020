@@ -9,6 +9,7 @@ namespace GGJ2020
         public Transform playerCamera;
         public float detectionDistance;
 
+        Enemy enemyAttack;
         bool detected;
         resource ui;
         public resource res { get; set; }
