@@ -39,7 +39,7 @@ namespace GGJ2020
             base.Update();
             if (m_uiActive)
             {
-                if (player.currentTool == repairTool)
+                if (m_ruined && player.currentTool == repairTool)
                 {
                     UIConstructor uic = m_currentUIWrapper.GetComponent<UIConstructor>();
                     uic.Flush();
@@ -53,7 +53,24 @@ namespace GGJ2020
                 }
                 else if (!m_ruined)
                 {
+                    UIConstructor uic = m_currentUIWrapper.GetComponent<UIConstructor>();
+                    uic.Flush();
 
+
+                    var cy = ResourceManager.GetCurrentYields(m_type);
+                    Color col = cy.m_maxed ? Color.black : Color.red;
+                    for (int i = 0; i < ResourceManager.ResourceTypeCount; i++)
+                    {
+                        ResourceTypes resType = (ResourceTypes)i;
+                        if (cy.m_maxDeltas.ContainsKey(resType))
+                        {
+                            if (cy.m_maxDeltas[resType] != 0.0f)
+                            {
+                                print("add slot " + resType);
+                                uic.AddSlot(resType, cy.m_currentDeltas[resType].ToString(), col);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -91,6 +108,12 @@ namespace GGJ2020
             }
 
             
+        }
+
+        public void ChangeBuildingType(BuildingTypes type)
+        {
+            m_type = type;
+            Setup();
         }
 
         public bool IsRuined() { return m_ruined; }
@@ -146,6 +169,28 @@ namespace GGJ2020
                 }
                 else { currentHit = maxHit; UpdateUI(); }
             }
+        }
+
+        public override void SwitchedTool(Tool newCurrent)
+        {
+            if (!m_ruined || (newCurrent != repairTool && newCurrent != gatherTool)) {
+                SetHasRelevantTool(true);
+                if (m_currentUIWrapper != null)
+                {
+                    m_currentUIWrapper.SetActive(false);
+                    m_uiActive = false;
+                }
+
+                if (m_runningUIWrapper != null)
+                {
+                    m_currentUIWrapper = m_runningUIWrapper;
+                    m_uiActive = true;
+                    FindHealthbarImage();
+                    CheckActive();
+                    UpdateUI();
+                }
+            }
+            else { base.SwitchedTool(newCurrent); }
         }
     }
 }
