@@ -19,7 +19,6 @@ namespace GGJ2020
             if (!gameObject.activeSelf)
                 return;
 
-            //transform.LookAt(transform.position + mainCamera.transform.rotation * -Vector3.back, mainCamera.transform.rotation * Vector3.up);
             Rotate();
         }
 
