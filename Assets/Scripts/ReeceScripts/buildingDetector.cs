@@ -10,7 +10,7 @@ namespace GGJ2020
         public float detectionDistance;
 
         bool detected;
-        buildingUI ui;
+        resource ui;
         public resource res { get; set; }
 
         // Start is called before the first frame update
@@ -37,14 +37,14 @@ namespace GGJ2020
                     detected = true;
                     if (hit.collider.gameObject.CompareTag("Building"))
                     {
-                        ui = hit.collider.gameObject.GetComponent<buildingUI>();
-                        ui.ActivateUI();
+                        ui = hit.collider.gameObject.GetComponent<resource>();
+                        ui.SetCloseEnough(true);
                     }
                     if(hit.collider.gameObject.CompareTag("Resource"))
                     {
                         // target is rock
-                        ui = hit.collider.gameObject.GetComponent<buildingUI>();
-                        ui.ActivateUI();
+                        ui = hit.collider.gameObject.GetComponent<resource>();
+                        ui.SetCloseEnough(true);
                         res = hit.collider.gameObject.GetComponent<resource>();
                     }
                 }
@@ -53,7 +53,7 @@ namespace GGJ2020
             {
                 if (ui != null)
                 {
-                    ui.DeactivateUI();
+                    ui.SetCloseEnough(false);
                     ui = null;
                 }
 
