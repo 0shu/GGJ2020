@@ -438,7 +438,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1191460387
 GameObject:
@@ -1017,7 +1017,7 @@ PrefabInstance:
     - target: {fileID: 7936960064379733035, guid: 767f574c7bd49fd448ab34559f315863,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7936960064379733035, guid: 767f574c7bd49fd448ab34559f315863,
         type: 3}
@@ -1155,7 +1155,7 @@ PrefabInstance:
     - target: {fileID: 1777001000106781052, guid: b5af3e616ab83ff44bcfb245d5833f51,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1777001000106781052, guid: b5af3e616ab83ff44bcfb245d5833f51,
         type: 3}
@@ -1381,6 +1381,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd95950ac35e0d040a79e187b535a451, type: 3}
+--- !u!1 &2380518458744285234 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5920159809337559091, guid: fd95950ac35e0d040a79e187b535a451,
+    type: 3}
+  m_PrefabInstance: {fileID: 2380518458744285233}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2380518458744285235
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380518458744285234}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -7850304782993210935, guid: 63296dbc575defd44b6558696f8b5da5, type: 3}
 --- !u!1001 &2499624780477782562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2121,7 +2141,7 @@ PrefabInstance:
     - target: {fileID: 1538713739620032507, guid: fcf1e82cc3192e448a4f7f20b48f3fc3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1538713739620032507, guid: fcf1e82cc3192e448a4f7f20b48f3fc3,
         type: 3}
@@ -3018,7 +3038,7 @@ PrefabInstance:
     - target: {fileID: 1890113468932765356, guid: a7a7f61a53d6bbd41a922bfc8adedd19,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1890113468932765356, guid: a7a7f61a53d6bbd41a922bfc8adedd19,
         type: 3}
