@@ -7,6 +7,9 @@ namespace GGJ2020
 {
     public class resource : MonoBehaviour
     {
+
+        //public enum GatheredResource { Wood, Brick, Steel };
+
         float currentHit;
         public float maxHit;
 
@@ -14,7 +17,11 @@ namespace GGJ2020
 
         protected playerInteraction player;
         protected materialDrops drops;
+
         public Tool gatherTool;
+
+        [SerializeField]
+        public ResourceTypes currentResource;
 
         bool deleteFlag = false;
 
@@ -27,6 +34,7 @@ namespace GGJ2020
             player = FindObjectOfType<playerInteraction>();
             drops = GetComponentInParent<materialDrops>();
             currentHit = maxHit;
+            //Material(1);
             UpdateUI();
         }
 
@@ -47,6 +55,26 @@ namespace GGJ2020
                 //destroy
                 gameObject.SetActive(false);
                 // activate destroyed version
+            }
+        }
+
+        public virtual void Material(int GatheredResource)
+        {
+            if (GatheredResource == 0)
+            {
+                currentResource = ResourceTypes.Wood;
+                print("GOT WOOD");
+                print(currentResource);
+            }
+            if (GatheredResource == 1)
+            {
+                currentResource = ResourceTypes.Bricks;
+                print("GOT BRICK");
+                print(currentResource);
+            }
+            if (GatheredResource == 2)
+            {
+                currentResource = ResourceTypes.Steel;
             }
         }
 

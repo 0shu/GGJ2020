@@ -12,6 +12,8 @@ TagManager:
   - Wood
   - Resource
   - BASE
+  - Enemy
+  - Turret
   layers:
   - Default
   - TransparentFX

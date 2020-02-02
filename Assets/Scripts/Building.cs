@@ -10,10 +10,12 @@ namespace GGJ2020
         bool m_ruined = true;
         float m_activationRatio = 1.0f;
 
+        [SerializeField] bool m_autoActivate = false;
+
         // Start is called before the first frame update
         void Start()
         {
-
+            if (m_autoActivate) { Repair(); }
         }
 
         // Update is called once per frame
@@ -34,6 +36,7 @@ namespace GGJ2020
         {
             ResourceManager.AddBuilding(m_type, this);
             m_ruined = false;
+            print("Building repaired.");
         }
 
         public bool IsFullyActive() { return (m_activationRatio == 1.0f); }
