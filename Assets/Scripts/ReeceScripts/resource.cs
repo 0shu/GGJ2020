@@ -8,30 +8,44 @@ namespace GGJ2020
     public class resource : MonoBehaviour
     {
 
-        //public enum GatheredResource { Wood, Brick, Steel };
+        //public enum ToolUsed { Hammer, Saw };
 
-        float currentHit;
+        protected float currentHit;
         public float maxHit;
 
-        public Image healthBar;
+        Image healthBar = null;
+
+        GameObject m_currentUIWrapper = null;
+        bool m_closeEnough = false;
 
         protected playerInteraction player;
         protected materialDrops drops;
 
-        public Tool gatherTool;
+        bool m_validToolActive = false;
 
-        [SerializeField]
-        public ResourceTypes currentResource;
+        public Tool gatherTool;
+        public GameObject m_gatherUIWrapper;
+
+        public Tool repairTool;
+        public GameObject m_repairUIWrapper;
+
+        public GameObject m_runningUIWrapper;
 
         bool deleteFlag = false;
 
-        public Mesh destroyedMesh;
         MeshFilter mRenderer;
 
-        void Start()
+        protected void Start()
         {
+            if (m_gatherUIWrapper != null) { m_gatherUIWrapper.SetActive(false); }
+            if (m_repairUIWrapper != null) { m_repairUIWrapper.SetActive(false); }
+            if (m_runningUIWrapper != null) { m_runningUIWrapper.SetActive(false); }
+
             mRenderer = GetComponent<MeshFilter>();
+
             player = FindObjectOfType<playerInteraction>();
+            player.AddResourceToWatch(this);
+
             drops = GetComponentInParent<materialDrops>();
             currentHit = maxHit;
             //Material(1);
@@ -40,47 +54,92 @@ namespace GGJ2020
 
         void OnDisable()
         {
-            drops.spawnFromMaterial(transform.position);
+            
         }
 
-        public virtual void Gather()
+        public virtual void Interact()
         {
-            currentHit--;
-            UpdateUI();
-            if (currentHit <= 0)
+            if (m_validToolActive)
             {
-                //play sound
-                //play particle system
-                //add resource            
-                //destroy
-                gameObject.SetActive(false);
-                // activate destroyed version
-            }
-        }
-
-        public virtual void Material(int GatheredResource)
-        {
-            if (GatheredResource == 0)
-            {
-                currentResource = ResourceTypes.Wood;
-                print("GOT WOOD");
-                print(currentResource);
-            }
-            if (GatheredResource == 1)
-            {
-                currentResource = ResourceTypes.Bricks;
-                print("GOT BRICK");
-                print(currentResource);
-            }
-            if (GatheredResource == 2)
-            {
-                currentResource = ResourceTypes.Steel;
+                currentHit--;
+                UpdateUI();
+                if (currentHit <= 0)
+                {
+                    CompleteAction();
+                }
             }
         }
 
-        void UpdateUI()
+        protected virtual void CompleteAction()
         {
-            healthBar.fillAmount = currentHit / maxHit;
+            if (player.currentTool == gatherTool)
+            {
+                drops.spawnFromMaterial(transform.position);
+                player.RemoveResourceFromWatch(this);
+                GameObject.Destroy(gameObject);
+            }
+        }
+
+        public virtual void SwitchedTool(Tool newCurrent) {
+            currentHit = maxHit;
+
+            SetHasRelevantTool(newCurrent == gatherTool || newCurrent == repairTool);
+            if (m_currentUIWrapper != null)
+            {
+                m_currentUIWrapper.SetActive(false);
+            }
+
+            if (newCurrent == gatherTool && m_gatherUIWrapper != null) {
+                m_currentUIWrapper = m_gatherUIWrapper;
+                FindHealthbarImage();
+                CheckActive();
+                UpdateUI();
+            }
+            else if (newCurrent == repairTool && m_repairUIWrapper != null)
+            {
+                m_currentUIWrapper = m_repairUIWrapper;
+                FindHealthbarImage();
+                CheckActive();
+                UpdateUI();
+            }
+            else { m_currentUIWrapper = null; }
+        }
+
+        protected void UpdateUI()
+        {
+            if (healthBar != null) { healthBar.fillAmount = currentHit / maxHit; }
+        }
+
+        private void CheckActive()
+        {
+            if (m_currentUIWrapper != null)
+            {
+                m_currentUIWrapper.SetActive(m_closeEnough && m_validToolActive);
+            }
+        }
+        public void SetCloseEnough(bool value = true)
+        {
+            m_closeEnough = value;
+            CheckActive();
+        }
+        public void SetHasRelevantTool(bool value = true)
+        {
+            m_validToolActive = value;
+            CheckActive();
+        }
+
+        void FindHealthbarImage()
+        {
+            bool found = false;
+            var images = m_currentUIWrapper.GetComponentsInChildren<Image>();
+            foreach (Image i in images)
+            {
+                if (i.CompareTag("HealthBarImage")) {
+                    healthBar = i;
+                    found = true;
+                }
+            }
+            if (!found) { healthBar = null; }
         }
     }
 }

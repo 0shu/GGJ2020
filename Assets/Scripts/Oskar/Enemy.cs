@@ -2,48 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+namespace GGJ2020
 {
-    public float currentHealth = 100;
-    private GameObject[] Turrets;
-    private GameObject turret;
-    public void takeDamage(float Damage)
+    public class Enemy : MonoBehaviour
     {
-        if (currentHealth - Damage >= 1)
+        public float currentHealth = 100;
+        private GameObject[] Turrets;
+        private GameObject turret;
+        public void takeDamage(float Damage)
         {
-            currentHealth -= Damage;
-        }
-        else
-        {
-
-            //Turrets = GameObject.FindGameObjectsWithTag("Turret");
-
-            //foreach (GameObject turret in Turrets)
-            //{
-            //    if(this != turret.GetComponent<Turret>().nearest)
-            //    {
-            //        print("im not");
-
-            //    }
-            //}
-
-            GameObject[] gameObjects;
-            gameObjects = GameObject.FindGameObjectsWithTag("Turret");
-
-            foreach (GameObject turret in gameObjects)
+            if (currentHealth - Damage >= 1)
             {
-                if(turret.GetComponent<Turret>().nearest == this)
+                currentHealth -= Damage;
+            }
+            else
+            {
+
+                //Turrets = GameObject.FindGameObjectsWithTag("Turret");
+
+                //foreach (GameObject turret in Turrets)
+                //{
+                //    if(this != turret.GetComponent<Turret>().nearest)
+                //    {
+                //        print("im not");
+
+                //    }
+                //}
+
+                GameObject[] gameObjects;
+                gameObjects = GameObject.FindGameObjectsWithTag("Turret");
+
+                foreach (GameObject turret in gameObjects)
                 {
-                    turret.GetComponent<Turret>().nearest = null;
-                    turret.GetComponent<Turret>().Targets.Remove(this);
+                    if (turret.GetComponent<Turret>().nearest == this)
+                    {
+                        turret.GetComponent<Turret>().nearest = null;
+                        turret.GetComponent<Turret>().Targets.Remove(this);
+                    }
                 }
+                this.gameObject.GetComponent<EnemyController>().Explode();
+                Destroy(this.gameObject);
+
             }
 
-            Destroy(this.gameObject);
+            // Update is called once per frame
 
         }
-
-        // Update is called once per frame
-
     }
 }

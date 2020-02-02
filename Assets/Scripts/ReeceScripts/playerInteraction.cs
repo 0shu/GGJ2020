@@ -4,13 +4,15 @@ using UnityEngine;
 
 namespace GGJ2020
 {
-    public enum Tool { Pickaxe, Hammer, Bucket };
+    public enum Tool { Pickaxe, Hammer, Bucket, None };
     public class playerInteraction : MonoBehaviour
     {
         public Tool currentTool;
 
         public List<GameObject> toolList = new List<GameObject>();
         buildingDetector detector;
+
+        List<resource> m_activeResources = new List<resource>();
 
         // Start is called before the first frame update
         void Start()
@@ -43,7 +45,8 @@ namespace GGJ2020
             {
                 if(detector.res != null)
                 {
-                    detector.res.Gather();
+                    print("!!!");
+                    detector.res.Interact();
                 }
                 
             }
@@ -60,6 +63,11 @@ namespace GGJ2020
                     toolList[i].SetActive(false);
                 }
             }
+
+            foreach (var res in m_activeResources) { res.SwitchedTool(currentTool); }
         }
+
+        public void AddResourceToWatch(resource toWatch) { m_activeResources.Add(toWatch); }
+        public void RemoveResourceFromWatch(resource fromWatch) { m_activeResources.Remove(fromWatch); }
     }
 }
