@@ -2421,7 +2421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_simpleDisplays:
-  - m_type: 1
+  - m_type: 0
     m_text: {fileID: 9149315374419512625}
   - m_type: 1
     m_text: {fileID: 3559414341768027630}

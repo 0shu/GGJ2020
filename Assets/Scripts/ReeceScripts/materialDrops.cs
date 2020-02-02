@@ -8,52 +8,77 @@ namespace GGJ2020
     public class materialDrops : MonoBehaviour
     {
 
-        [Header("Resources")]
-        [Space(5f)]
-        public GameObject steel;
-        public GameObject wood;
-        public GameObject brick;
+        [System.Serializable]
+        public struct SpawnOption
+        {
+            public GameObject m_prefab;
+            public float m_weight;
+        }
 
-        public float steelCounter;
-        public float woodCounter;
-        public float brickCounter;
+        //[Header("Resources")]
+        //[Space(5f)]
+        //public GameObject steel;
+        //public GameObject wood;
+        //public GameObject brick;
 
-        List<GameObject> materialPickup = new List<GameObject>();
+        //public float steelCounter;
+        //public float woodCounter;
+        //public float brickCounter;
 
-        [Header("Travel targets")]
-        [Space(5f)]
+        float m_totalWeight = 0.0f;
+
         [SerializeField]
-        Transform[] spawnTargets;
+        List<SpawnOption> m_options = new List<SpawnOption>();
+        [SerializeField]
+        int m_minSpawncount;
+        [SerializeField]
+        int m_maxSpawncount;
+
+        //[Header("Travel targets")]
+        //[Space(5f)]
+        //[SerializeField]
+        //Transform[] spawnTargets;
 
         void Start()
         {
-            for(int i = 0; i < steelCounter; i++)
-            {
-                materialPickup.Add(steel);
-            }
+            foreach (var i in m_options) { m_totalWeight += i.m_weight; }
 
-            for (int i = 0; i < woodCounter; i++)
-            {
-                materialPickup.Add(wood);
-            }
-
-            for (int i = 0; i < brickCounter; i++)
-            {
-                materialPickup.Add(brick);
-            }
+            //print("Total Weight: " + m_totalWeight);
         }
 
         public void spawnFromMaterial(Vector3 pos)
         {
-            for(int i = 0; i < spawnTargets.Length; i++)
-            {
-                int num = Random.Range(0, materialPickup.Count);
-                GameObject materialCollect = Instantiate(materialPickup[num], pos, Quaternion.identity) as GameObject;
+            int count = Random.Range(m_minSpawncount, m_maxSpawncount);
 
-                materialPickup item = materialCollect.GetComponent<materialPickup>();
-                StartCoroutine(item.MoveToTarget(spawnTargets[i].position, 1, 1));
+            for (int i = 0; i < count; i++)
+            {
+                float selection = Random.Range(0.0f, m_totalWeight);
+                bool found = false;
+                float currentProgress = 0.0f;
+
+                for (int j = 0; j < m_options.Count && !found; j++)
+                {
+                    currentProgress += m_options[j].m_weight;
+                    //print("Current Progress: " + currentProgress);
+                    if (selection < currentProgress)
+                    {
+                        found = true;
+
+                        //print("Spawning item of index: " + j);
+
+                        GameObject materialCollect = Instantiate(m_options[j].m_prefab, pos, Quaternion.identity) as GameObject;
+                        
+                        materialPickup item = materialCollect.GetComponent<materialPickup>();
+
+                        Vector3 dest = new Vector3(Random.Range(-2.0f, 2.0f), 0.0f, Random.Range(-2.0f, 2.0f));
+                        dest += transform.position;
+
+                        print("Moving spawned item to: " + dest.x + ", " + dest.y + ", " + dest.z);
+
+                        item.StartMoveToTargetCoroutine(dest, 1, 1);
+                    }
+                }
             }
-            
         }
     }
 }
