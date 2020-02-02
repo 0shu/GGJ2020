@@ -40,10 +40,10 @@ namespace GGJ2020
 
             if (Input.GetKeyDown("space"))
             {
-                if (isGrounded && verticalMovement < 0)
-                {
+                //if (isGrounded && verticalMovement < 0)
+                //{
                     rb.AddForce(transform.up * jumpForce);
-                }
+                //}
             }
         }
 
