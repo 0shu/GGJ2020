@@ -34,9 +34,28 @@ namespace GGJ2020
         }
 
         // Update is called once per frame
-        void Update()
+        new void Update()
         {
+            base.Update();
+            if (m_uiActive)
+            {
+                if (player.currentTool == repairTool)
+                {
+                    UIConstructor uic = m_currentUIWrapper.GetComponent<UIConstructor>();
+                    uic.Flush();
 
+                    var cp = ResourceManager.GetCostProfile(m_type);
+                    foreach (var res in cp.m_buildingCost)
+                    {
+                        Color col = res.m_viabilityBool ? Color.black : Color.red;
+                        uic.AddSlot(res.m_type, res.m_delta.ToString(), col);
+                    }
+                }
+                else if (!m_ruined)
+                {
+
+                }
+            }
         }
 
         public Building()
@@ -105,7 +124,7 @@ namespace GGJ2020
             {
                 drops.spawnFromMaterial(transform.position);
                 player.RemoveResourceFromWatch(this);
-                GameObject.Destroy(this);
+                GameObject.Destroy(this.gameObject);
             }
             else if (player.currentTool == repairTool)
             {

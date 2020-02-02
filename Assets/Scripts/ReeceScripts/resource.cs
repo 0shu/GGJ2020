@@ -15,13 +15,14 @@ namespace GGJ2020
 
         Image healthBar = null;
 
-        GameObject m_currentUIWrapper = null;
+        protected GameObject m_currentUIWrapper = null;
         bool m_closeEnough = false;
 
         protected playerInteraction player;
         protected materialDrops drops;
 
         bool m_validToolActive = false;
+        protected bool m_uiActive = false;
 
         public Tool gatherTool;
         public GameObject m_gatherUIWrapper;
@@ -51,10 +52,25 @@ namespace GGJ2020
             //Material(1);
             UpdateUI();
         }
-
-        void OnDisable()
+        protected void Update()
         {
-            
+            if (m_uiActive)
+            {
+                if (player.currentTool == gatherTool && drops != null)
+                {
+                    UIConstructor uic = m_currentUIWrapper.GetComponent<UIConstructor>();
+                    uic.Flush();
+
+                    foreach (var option in drops.m_options)
+                    {
+                        float prob = (option.m_weight / drops.m_totalWeight);
+                        string weightText = (prob * 100.0f).ToString() + "%";
+                        Color col = prob > 0.25f ? Color.black : Color.red;
+
+                        uic.AddSlot(option.m_type, weightText, col);
+                    }
+                }
+            }
         }
 
         public virtual void Interact()
@@ -76,7 +92,7 @@ namespace GGJ2020
             {
                 drops.spawnFromMaterial(transform.position);
                 player.RemoveResourceFromWatch(this);
-                GameObject.Destroy(gameObject);
+                GameObject.Destroy(this.gameObject);
             }
         }
 
@@ -87,10 +103,12 @@ namespace GGJ2020
             if (m_currentUIWrapper != null)
             {
                 m_currentUIWrapper.SetActive(false);
+                m_uiActive = false;
             }
 
             if (newCurrent == gatherTool && m_gatherUIWrapper != null) {
                 m_currentUIWrapper = m_gatherUIWrapper;
+                m_uiActive = true;
                 FindHealthbarImage();
                 CheckActive();
                 UpdateUI();
@@ -98,6 +116,7 @@ namespace GGJ2020
             else if (newCurrent == repairTool && m_repairUIWrapper != null)
             {
                 m_currentUIWrapper = m_repairUIWrapper;
+                m_uiActive = true;
                 FindHealthbarImage();
                 CheckActive();
                 UpdateUI();
@@ -114,7 +133,8 @@ namespace GGJ2020
         {
             if (m_currentUIWrapper != null)
             {
-                m_currentUIWrapper.SetActive(m_closeEnough && m_validToolActive);
+                m_uiActive = (m_closeEnough && m_validToolActive);
+                m_currentUIWrapper.SetActive(m_uiActive);
             }
         }
         public void SetCloseEnough(bool value = true)
