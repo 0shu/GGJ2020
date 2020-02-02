@@ -55,6 +55,7 @@ namespace GGJ2020
             m_agent = GetComponent<NavMeshAgent>();
             m_longTermTarget = this.transform.position;
             m_currentTarget = m_longTermTarget;
+            StartCoroutine(ReenableNavMesh());
     }
 
         void Update()
@@ -83,6 +84,11 @@ namespace GGJ2020
 
         void FixedUpdate()
         {
+            if (m_agent == null)
+            {
+
+            }
+
             if (m_objectiveCheckTrigger)
             {
                 
@@ -263,6 +269,13 @@ namespace GGJ2020
             yield return new WaitForSeconds(3f);
             m_agent.enabled = true;
             Explode();
+        }
+
+        IEnumerator ReenableNavMesh()
+        {
+            m_agent.enabled = false;
+            yield return new WaitForSeconds(15f);
+            m_agent.enabled = true;
         }
     }
 

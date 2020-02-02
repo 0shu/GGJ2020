@@ -17,8 +17,8 @@ namespace GGJ2020
         {
             for (uint i = 0; i < 250; i++)
             {
-                var xxx = Instantiate(m_enemy, new Vector3( Random.Range(-500, 500), 20.0f, Random.Range(-500, 500)), Quaternion.identity) as GameObject;
-                xxx = Instantiate(m_sheep, new Vector3( Random.Range(-500, 500), 20.0f, Random.Range(-500, 500)), Quaternion.identity) as GameObject;
+                var xxx = Instantiate(m_enemy, new Vector3( Random.Range(-500, 500), 50.0f, Random.Range(-500, 500)), Quaternion.identity) as GameObject;
+                xxx = Instantiate(m_sheep, new Vector3( Random.Range(-500, 500), 50.0f, Random.Range(-500, 500)), Quaternion.identity) as GameObject;
             }
             StartCoroutine(WaitForWave());
         }
@@ -30,7 +30,7 @@ namespace GGJ2020
             {
                 for (int i = 0; i < m_waveCount; i++)
                 {
-                    var xxx = Instantiate(m_enemy, new Vector3(Random.Range(-500, 500), 20.0f, Random.Range(-500, 500)), Quaternion.identity) as GameObject;
+                    var xxx = Instantiate(m_enemy, new Vector3(Random.Range(-500, 500), 50.0f, Random.Range(-500, 500)), Quaternion.identity) as GameObject;
                     xxx.GetComponent<EnemyController>().MakeAggressive(new Vector3(0.0f, 0.0f, 0.0f));
                 }
 

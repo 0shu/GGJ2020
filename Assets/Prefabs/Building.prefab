@@ -138,10 +138,25 @@ MonoBehaviour:
       type: 3}
     m_repairedMesh: {fileID: 4458570610722532838, guid: f929b7aeeccc1ec41bc3653d457ccfa2,
       type: 3}
+  - m_type: 1
+    m_ruinedMesh: {fileID: 2522510737092799976, guid: fcf1e82cc3192e448a4f7f20b48f3fc3,
+      type: 3}
+    m_repairedMesh: {fileID: 3382895077511011183, guid: b5af3e616ab83ff44bcfb245d5833f51,
+      type: 3}
   - m_type: 2
     m_ruinedMesh: {fileID: 8268161727739005296, guid: 5f501acb4697c43429bc63df4b964c57,
       type: 3}
     m_repairedMesh: {fileID: 4555713084102188314, guid: 3821302325fcdad4db9262c900667a0e,
+      type: 3}
+  - m_type: 3
+    m_ruinedMesh: {fileID: 6376788077884880440, guid: 767f574c7bd49fd448ab34559f315863,
+      type: 3}
+    m_repairedMesh: {fileID: 3197645858401010879, guid: a7a7f61a53d6bbd41a922bfc8adedd19,
+      type: 3}
+  - m_type: 4
+    m_ruinedMesh: {fileID: 8259899442609654300, guid: 9e3a1f6c2c9fb9d44836d570cfaa1d34,
+      type: 3}
+    m_repairedMesh: {fileID: 3066359972531461590, guid: 590112679e92d0447846531d8039dbbb,
       type: 3}
 --- !u!65 &120105602758015157
 BoxCollider:
@@ -837,7 +852,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0d179a905817a064084cd18306c2e2de, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
