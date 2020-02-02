@@ -17,6 +17,7 @@ namespace GGJ2020
             AttackingPlayer,
             AttackingBuilding,
             MovingToLocation,
+            Exploading,
             Death
         }
 
@@ -26,6 +27,11 @@ namespace GGJ2020
         public float lookInterval = 10f;
         public float stopDistance = 2.0f;
 
+        public float explosionDelay = 2f;
+        public float explosionRadius = 15f;
+        public float explosionForce = 700f;
+
+        public GameObject explosionEffect;
         private Transform player;
 
         Vector3 m_currentTarget;
@@ -33,6 +39,7 @@ namespace GGJ2020
         bool m_objectiveCheckTrigger = true;
         NavMeshAgent m_agent;
         bool m_aggressive = false;
+        bool goingToPlayer = false;
 
         IEnumerator m_objectiveCheck()
         {
@@ -50,59 +57,37 @@ namespace GGJ2020
 
         void Update()
         {
-            
-
-
-
-            /*//Calculate distance to player
-            float distancetoPlayer = Vector3.Distance(Player.position, transform.position);
-            //If its nearby go to them
-            if (distancetoPlayer <= lookRadius)
+            if (goingToPlayer)
             {
-                Debug.Log("Going to Player");
-                m_agent.SetDestination(Player.position);
-                //If you are close to the player (update rotation)
-                if (distancetoPlayer <= m_agent.stoppingDistance)
+                float DistanceToPlayer = (Vector3.Distance(transform.position, player.transform.position));
+                if (DistanceToPlayer <= stopDistance)
                 {
-                    FaceTarget();
+                    Explode();
                 }
             }
-            else
-            {
-                //Check if you are in the range of closest building
-                float DistancetoClosestBuilding = Vector3.Distance(Closestbuilding.position, transform.position);
-                
-                if (DistancetoClosestBuilding <= lookRadius)
-                {
-                    Debug.Log("Going to Building");
-                    Debug.Log(target.position);
-
-                    agent.SetDestination(target.position);
-                    Debug.Log(agent.SetDestination(target.position));
-                    
-                }
-                else
-                {
-                    FindClosestBuilding();
-                }
-
-            }*/
+            
         }
 
         void FixedUpdate()
         {
             if (m_objectiveCheckTrigger)
             {
+                
                 float sqrDistanceToPlayer = (player.position - transform.position).sqrMagnitude;
                 var nearestBuilding = ResourceManager.GetClosestActiveBuildingTo(transform.position);
                 if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
                 {
                     m_state = EnemyState.AttackingPlayer;
+                    
+                    
                     m_currentTarget = player.position;
+                    
 
                 }
                 else if (nearestBuilding != null && ((nearestBuilding.transform.position - transform.position).sqrMagnitude) <= (lookRadius * lookRadius))
                 {
+                    print("Triggering Attacking Building");
+
                     m_state = EnemyState.AttackingBuilding;
                     //m_currentTarget = nearestBuilding.transform.position;
                     m_agent.SetDestination(new Vector3(nearestBuilding.transform.position.x,
@@ -140,9 +125,12 @@ namespace GGJ2020
                 case EnemyState.AttackingPlayer:
                     m_currentTarget = player.position;
                     m_agent.SetDestination(m_currentTarget);
+                    goingToPlayer = true;
                     break;
                 case EnemyState.AttackingBuilding:
                     
+                    break;
+                case EnemyState.Exploading:
                     break;
                 case EnemyState.MovingToLocation:
                     if ((transform.position - m_longTermTarget).sqrMagnitude <= (stopDistance * stopDistance))
@@ -154,6 +142,7 @@ namespace GGJ2020
                     break;
                 case EnemyState.Idle:
                 default:
+                    goingToPlayer = false;
                     break;
 
             }
@@ -202,6 +191,40 @@ namespace GGJ2020
         public void Die()
         {
             Destroy(this.gameObject);
+        }
+
+        public void Explode()
+        {
+            m_agent.enabled = false;
+            m_objectiveCheckTrigger = false;
+            m_state = EnemyState.Exploading; 
+
+            GameObject clone = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Destroy(clone, 1.0f);
+
+            Rigidbody minerigid = this.GetComponent<Rigidbody>();
+
+            Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+            foreach (Collider nearbyObject in colliders)
+            {
+                Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    
+                    rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+                    rb.AddForce(Vector3.up * (explosionForce/1.5f));
+                }
+            }
+            minerigid.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            StartCoroutine(Reenable());
+        }
+
+        IEnumerator Reenable()
+        {
+            m_state = EnemyState.Exploading;
+            yield return new WaitForSeconds(5f);
+            m_agent.enabled = true;
+            m_objectiveCheckTrigger = true;
         }
     }
 
