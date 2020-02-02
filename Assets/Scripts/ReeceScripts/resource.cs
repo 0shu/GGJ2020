@@ -82,6 +82,7 @@ namespace GGJ2020
                 if (currentHit <= 0)
                 {
                     CompleteAction();
+                    SwitchedTool(player.currentTool);
                 }
             }
         }
@@ -129,7 +130,7 @@ namespace GGJ2020
             if (healthBar != null) { healthBar.fillAmount = currentHit / maxHit; }
         }
 
-        private void CheckActive()
+        protected void CheckActive()
         {
             if (m_currentUIWrapper != null)
             {
@@ -148,7 +149,7 @@ namespace GGJ2020
             CheckActive();
         }
 
-        void FindHealthbarImage()
+        protected void FindHealthbarImage()
         {
             bool found = false;
             var images = m_currentUIWrapper.GetComponentsInChildren<Image>();
