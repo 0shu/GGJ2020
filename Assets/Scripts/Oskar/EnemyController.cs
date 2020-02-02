@@ -9,14 +9,15 @@ namespace GGJ2020
     public class EnemyController : MonoBehaviour
     {
         [SerializeField]
-        float checkInterval;
+        float checkInterval = 3.0f;
 
         public enum EnemyState
         {
             Idle,
             AttackingPlayer,
             AttackingBuilding,
-            MovingToLocation
+            MovingToLocation,
+            Death
         }
 
         EnemyState m_state = EnemyState.Idle;
@@ -93,24 +94,31 @@ namespace GGJ2020
             if (m_objectiveCheckTrigger)
             {
                 float sqrDistanceToPlayer = (player.position - transform.position).sqrMagnitude;
+                var nearestBuilding = ResourceManager.GetClosestActiveBuildingTo(transform.position);
                 if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
                 {
                     m_state = EnemyState.AttackingPlayer;
                     m_currentTarget = player.position;
+
                 }
-                else if (((FindClosestBuilding().position - transform.position).sqrMagnitude) <= (lookRadius * lookRadius))
+                else if (nearestBuilding != null && ((nearestBuilding.transform.position - transform.position).sqrMagnitude) <= (lookRadius * lookRadius))
                 {
                     m_state = EnemyState.AttackingBuilding;
-                    m_currentTarget = FindClosestBuilding().position;
-                    m_agent.SetDestination(m_currentTarget);
+                    //m_currentTarget = nearestBuilding.transform.position;
+                    m_agent.SetDestination(new Vector3(nearestBuilding.transform.position.x,
+                                                        0f,
+                                                        nearestBuilding.transform.position.z));
+
                 }
                 else
                 {
+
                     if (m_aggressive)
                     {
                         m_state = EnemyState.MovingToLocation;
                         m_currentTarget = m_longTermTarget;
                         m_agent.SetDestination(m_currentTarget);
+
                     }
                     else
                     {
@@ -118,6 +126,7 @@ namespace GGJ2020
                         m_longTermTarget = this.transform.position;
                         m_currentTarget = m_longTermTarget;
                         m_agent.SetDestination(m_currentTarget);
+                        print("Triggering idle");
                     }
                 }
 
@@ -133,6 +142,7 @@ namespace GGJ2020
                     m_agent.SetDestination(m_currentTarget);
                     break;
                 case EnemyState.AttackingBuilding:
+                    
                     break;
                 case EnemyState.MovingToLocation:
                     if ((transform.position - m_longTermTarget).sqrMagnitude <= (stopDistance * stopDistance))
@@ -148,23 +158,23 @@ namespace GGJ2020
 
             }
         }
-        Transform target;
-        Transform FindClosestBuilding()
-        {
-            
-            //Otherwise Find the closest building#
-            float temp = 2000;
-            foreach (GameObject building in PlayerManager.instance.bases)
-            {
-                float DistanceToBuilding = Vector3.Distance(building.transform.position, transform.position);
-                if (DistanceToBuilding < temp)
-                {
-                    target = building.transform;
-                    temp = DistanceToBuilding;
-                }
-            }
-            return target;
-        }
+        //Transform target;
+        //Transform FindClosestBuilding()
+        //{
+
+        //    //Otherwise Find the closest building#
+        //    float temp = 2000;
+        //    foreach (GameObject building in PlayerManager.instance.bases)
+        //    {
+        //        float DistanceToBuilding = Vector3.Distance(building.transform.position, transform.position);
+        //        if (DistanceToBuilding < temp)
+        //        {
+        //            target = building.transform;
+        //            temp = DistanceToBuilding;
+        //        }
+        //    }
+        //    return target;
+        //}
 
         EnemyState GetState()
         {
@@ -181,6 +191,17 @@ namespace GGJ2020
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, lookRadius);
+        }
+
+        public void MakeAggressive(Vector3 destinationLocation)
+        {
+            m_aggressive = true;
+            m_longTermTarget = destinationLocation;
+        }
+
+        public void Die()
+        {
+            Destroy(this.gameObject);
         }
     }
 

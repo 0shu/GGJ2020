@@ -539,7 +539,7 @@ MonoBehaviour:
 
     This year''s theme was:
 
-    <size=120><b><i>REPAIR</i></b></size>
+    <size=120><color=#DF4430><b><i>REPAIR</i></b></color></size>
 
 
 
@@ -585,7 +585,7 @@ MonoBehaviour:
 
     <size=80><b>Joshua Simons</b></size>
 
-    Programming (Source Control)
+    Team Management (Source Control)
 
 
 
@@ -857,7 +857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
+  m_Color: {r: 0.8584906, g: 0.2851608, b: 0.20652366, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
