@@ -4,6 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Ground
+  - Bucket
+  - Hammer
+  - Pickaxe
+  - Building
+  - Wood
+  - Resource
   - BASE
   layers:
   - Default
@@ -14,7 +21,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 
