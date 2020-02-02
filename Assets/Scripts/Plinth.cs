@@ -34,7 +34,7 @@ namespace GGJ2020 {
                 if (selection < currentProgress)
                 {
                     found = true;
-                    GameObject building = Instantiate(m_buildingPrefab, transform.position + new Vector3(0.0f, 5.0f, 0.0f), transform.rotationr) as GameObject;
+                    GameObject building = Instantiate(m_buildingPrefab, transform.position + new Vector3(0.0f, 5.0f, 0.0f), transform.rotation) as GameObject;
 
                     Building comp = building.GetComponent<Building>();
                     comp.ChangeBuildingType(m_options[j].m_type);

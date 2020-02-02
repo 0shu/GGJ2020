@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433b75c22708efd4ebb8c6b8151b8cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 100
+  currentHealth: 40
 --- !u!114 &8469352507629219969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,3 +163,7 @@ MonoBehaviour:
   lookRadius: 40
   lookInterval: 1
   stopDistance: 2
+  explosionDelay: 2
+  explosionRadius: 15
+  explosionForce: 700
+  explosionEffect: {fileID: 0}

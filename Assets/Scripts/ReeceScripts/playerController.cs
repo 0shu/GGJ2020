@@ -61,11 +61,10 @@ namespace GGJ2020
 
         public void takeDamage(float Damage)
         {
-            if (playerhealth - Damage >= 1)
-            {
-                playerhealth -= Damage;
-            }
-            else
+            Debug.Log("PH-" + playerhealth + " Damage-" + Damage);
+
+            playerhealth = Mathf.Max(0.0f, playerhealth - Damage);
+            if (playerhealth - Damage == 0)
             {
                 SceneManager.LoadScene("CREDITS");
                 Destroy(this.gameObject);

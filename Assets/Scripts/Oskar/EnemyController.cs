@@ -59,16 +59,26 @@ namespace GGJ2020
 
         void Update()
         {
-            if (goingToPlayer)
+            if (m_state == EnemyState.AttackingPlayer)
             {
                 float DistanceToPlayer = (Vector3.Distance(transform.position, player.transform.position));
                 if (DistanceToPlayer <= stopDistance)
                 {
-                    Explode();
+                    TriggerFuse();
+                    //Explode();
                 }
             }
 
             
+        }
+
+        public void TriggerFuse()
+        {
+            if (m_state != EnemyState.Exploading)
+            {
+                m_state = EnemyState.Exploading;
+                StartCoroutine(Fuse());
+            }
         }
 
         void FixedUpdate()
@@ -95,7 +105,8 @@ namespace GGJ2020
                     if(distanceToBuilding <= 10f)
                     {
 
-                        Explode();
+                        //Explode();
+                        TriggerFuse();
                         nearestBuilding.gameObject.GetComponent<BuildingDamage>().takeDamage(8f);
                     }
                     m_state = EnemyState.AttackingBuilding;
@@ -141,12 +152,15 @@ namespace GGJ2020
                     
                     break;
                 case EnemyState.Exploading:
+                    transform.Rotate(Vector3.up, 10.0f, Space.World);
+
                     break;
                 case EnemyState.MovingToLocation:
                     if ((transform.position - m_longTermTarget).sqrMagnitude <= (stopDistance * stopDistance))
                     {
                         m_aggressive = false;
                         StopCoroutine("m_objectiveCheck");
+                        m_state = EnemyState.Idle;
                         m_objectiveCheckTrigger = true;
                     }
                     break;
@@ -205,6 +219,7 @@ namespace GGJ2020
 
         public void Explode()
         {
+            print("Exploding)");
             m_agent.enabled = false;
             m_objectiveCheckTrigger = false;
             m_state = EnemyState.Exploading; 
@@ -217,16 +232,19 @@ namespace GGJ2020
             Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
             foreach (Collider nearbyObject in colliders)
             {
+                Debug.Log("Detected hit.");
                 Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
                     
                     rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
                     rb.AddForce(Vector3.up * (explosionForce/1.5f));
+
+                    var pc = nearbyObject.GetComponent<playerController>();
+                    if (pc != null) { pc.takeDamage(10f); }
                 }
             }
-            player.GetComponent<playerController>().takeDamage(10f);
-            minerigid.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            //minerigid.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             StartCoroutine(Reenable());
         }
 
@@ -236,6 +254,15 @@ namespace GGJ2020
             yield return new WaitForSeconds(5f);
             m_agent.enabled = true;
             m_objectiveCheckTrigger = true;
+        }
+
+        IEnumerator Fuse()
+        {
+            m_agent.enabled = false;
+            m_state = EnemyState.Exploading;
+            yield return new WaitForSeconds(3f);
+            m_agent.enabled = true;
+            Explode();
         }
     }
 

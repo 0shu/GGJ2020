@@ -40,7 +40,7 @@ namespace GGJ2020
                         turret.GetComponent<Turret>().Targets.Remove(this);
                     }
                 }
-                this.gameObject.GetComponent<EnemyController>().Explode();
+                this.gameObject.GetComponent<EnemyController>().TriggerFuse();
                 Destroy(this.gameObject);
 
             }
