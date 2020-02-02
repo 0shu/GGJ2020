@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GGJ2020
 {
-    public enum Tool { Pickaxe, Hammer, Bucket, None };
+    public enum Tool { Pickaxe, Hammer, Bucket, Weapon, None };
     public class playerInteraction : MonoBehaviour
     {
         public Tool currentTool;
@@ -18,7 +18,7 @@ namespace GGJ2020
         void Start()
         {
             detector = GetComponent<buildingDetector>();
-            currentTool = Tool.Pickaxe;
+            currentTool = Tool.Hammer;
             Interaction();
         }
 
@@ -40,13 +40,23 @@ namespace GGJ2020
                 currentTool = Tool.Bucket;
                 Interaction();              
             }
+            if (Input.GetKeyDown("4"))
+            {
+                currentTool = Tool.Weapon;
+                print("Weapon");
+                Interaction();
+            }
 
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 if(detector.res != null)
                 {
                     print("!!!");
                     detector.res.Interact();
+                }
+                if(currentTool == Tool.Weapon)
+                {
+                    this.gameObject.GetComponent<attackEnemy>().AttackEnemy();
                 }
                 
             }
