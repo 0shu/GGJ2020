@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace GGJ2020
 {
@@ -10,6 +10,8 @@ namespace GGJ2020
         //Walk speed variable
         public float walkSpeed;
         public float jumpForce;
+
+        public float playerhealth;
 
         //Rigid body
         Rigidbody rb;
@@ -55,6 +57,20 @@ namespace GGJ2020
             Vector3 yVelFix = new Vector3(0, rb.velocity.y, 0);
             rb.velocity = moveDirection * walkSpeed * Time.deltaTime;
             rb.velocity += yVelFix;
+        }
+
+        public void takeDamage(float Damage)
+        {
+            if (playerhealth - Damage >= 1)
+            {
+                playerhealth -= Damage;
+            }
+            else
+            {
+                SceneManager.LoadScene("CREDITS");
+                Destroy(this.gameObject);
+            }
+
         }
     }
 }

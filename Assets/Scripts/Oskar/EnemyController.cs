@@ -49,7 +49,7 @@ namespace GGJ2020
         }
         void Start()
         {
-            player = PlayerManager.instance.player.transform;
+            player = GameObject.FindWithTag("Player").transform;
             m_agent = GetComponent<NavMeshAgent>();
             m_longTermTarget = this.transform.position;
             m_currentTarget = m_longTermTarget;
@@ -73,7 +73,7 @@ namespace GGJ2020
             if (m_objectiveCheckTrigger)
             {
                 
-                float sqrDistanceToPlayer = (player.position - transform.position).sqrMagnitude;
+                float sqrDistanceToPlayer = (player.position - transform.position).sqrMagnitude; 
                 var nearestBuilding = ResourceManager.GetClosestActiveBuildingTo(transform.position);
                 if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
                 {
@@ -215,6 +215,7 @@ namespace GGJ2020
                     rb.AddForce(Vector3.up * (explosionForce/1.5f));
                 }
             }
+            player.GetComponent<playerController>().takeDamage(10f);
             minerigid.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             StartCoroutine(Reenable());
         }
