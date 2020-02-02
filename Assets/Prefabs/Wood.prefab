@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6607357356759888879}
   - component: {fileID: 6607357356759888875}
   - component: {fileID: 2837674895927595132}
+  - component: {fileID: -2438486265182023466}
   m_Layer: 0
   m_Name: Wood
   m_TagString: Resource
@@ -203,6 +204,29 @@ MonoBehaviour:
   maxHit: 7
   healthBar: {fileID: 6607357357050818677}
   gatherTool: 1
+  currentResource: 0
+  destroyedMesh: {fileID: 0}
+--- !u!114 &-2438486265182023466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607357356759888878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6578956b39cd3fb4da1d58e3ffb82447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_options:
+  - m_prefab: {fileID: 3578317374889854955, guid: 78de51395b6c1ed4ba16029e60fb2d54,
+      type: 3}
+    m_weight: 1
+  - m_prefab: {fileID: 5928194005808951715, guid: 793ef998a04a4c3419539c325f018072,
+      type: 3}
+    m_weight: 3
+  m_minSpawncount: 2
+  m_maxSpawncount: 5
 --- !u!1 &6607357356818650349
 GameObject:
   m_ObjectHideFlags: 0

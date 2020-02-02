@@ -6,7 +6,8 @@ namespace GGJ2020
 {
     public class materialPickup : MonoBehaviour
     {
-        // type of the resource (enum from Stefan)
+        [SerializeField]
+        ResourceTypes m_type;
 
         GameObject player;
         public float maxDistance;
@@ -19,19 +20,20 @@ namespace GGJ2020
         public Vector3 rotationAxis;
         public float rotationSpeed;
 
+        //protected resource ResourcesCollected;
         bool m_bMoveUp;
 
         // Start is called before the first frame update
         void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player");
+            //ResourcesCollected = FindObjectOfType<resource>();
             StartCoroutine(MoveUp());
         }
 
         // Update is called once per frame
         void Update()
         {
-
             if (Vector3.Distance(transform.position, player.transform.position) < maxDistance)
             {
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
@@ -55,9 +57,8 @@ namespace GGJ2020
         {
             if(coll.CompareTag("Player"))
             {
-                // add resources
-                print("Collected");
-                Destroy(gameObject);
+                ResourceManager.ChangeResource(m_type, 1);
+                Destroy(this.gameObject);
             }
         }
 
@@ -88,6 +89,11 @@ namespace GGJ2020
                 }
                 else break;
             }
+        }
+
+        public void StartMoveToTargetCoroutine(Vector3 targetPos, float flightHeight, float flightDuration)
+        {
+            StartCoroutine(MoveToTarget(targetPos, flightHeight, flightDuration));
         }
     }
 }

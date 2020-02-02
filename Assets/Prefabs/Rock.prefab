@@ -125,7 +125,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8994672287398585988}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 5026483371143942260, guid: 04e6d3d10ac6cd74f9d8771aac221044, type: 3}
 --- !u!23 &8994672287398585990
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -204,6 +204,7 @@ MonoBehaviour:
   maxHit: 5
   healthBar: {fileID: 8994672288244573471}
   gatherTool: 0
+  currentResource: 1
   destroyedMesh: {fileID: -8391712784951336479, guid: 4e31597d3aba5cb45aeb675991af37ce,
     type: 3}
 --- !u!114 &1041274255
@@ -218,16 +219,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6578956b39cd3fb4da1d58e3ffb82447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steel: {fileID: 3578317374889854955, guid: 78de51395b6c1ed4ba16029e60fb2d54, type: 3}
-  wood: {fileID: 3578317374889854955, guid: 78de51395b6c1ed4ba16029e60fb2d54, type: 3}
-  brick: {fileID: 3578317374889854955, guid: 78de51395b6c1ed4ba16029e60fb2d54, type: 3}
-  steelCounter: 5
-  woodCounter: 4
-  brickCounter: 1
-  spawnTargets:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  m_options:
+  - m_prefab: {fileID: 3578317374889854955, guid: 78de51395b6c1ed4ba16029e60fb2d54,
+      type: 3}
+    m_weight: 3
+  - m_prefab: {fileID: 5928194005808951715, guid: 793ef998a04a4c3419539c325f018072,
+      type: 3}
+    m_weight: 1
+  m_minSpawncount: 5
+  m_maxSpawncount: 7
 --- !u!1 &8994672287474024839
 GameObject:
   m_ObjectHideFlags: 0
