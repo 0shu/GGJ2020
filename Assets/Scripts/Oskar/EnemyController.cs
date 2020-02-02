@@ -41,6 +41,8 @@ namespace GGJ2020
         bool m_aggressive = false;
         bool goingToPlayer = false;
 
+        private float distanceToBuilding;
+
         IEnumerator m_objectiveCheck()
         {
             yield return new WaitForSeconds(checkInterval);
@@ -65,6 +67,7 @@ namespace GGJ2020
                     Explode();
                 }
             }
+
             
         }
 
@@ -88,6 +91,13 @@ namespace GGJ2020
                 {
                     print("Triggering Attacking Building");
 
+                    distanceToBuilding = Vector3.Distance(transform.position, nearestBuilding.transform.position);
+                    if(distanceToBuilding <= 10f)
+                    {
+
+                        Explode();
+                        nearestBuilding.gameObject.GetComponent<BuildingDamage>().takeDamage(8f);
+                    }
                     m_state = EnemyState.AttackingBuilding;
                     //m_currentTarget = nearestBuilding.transform.position;
                     m_agent.SetDestination(new Vector3(nearestBuilding.transform.position.x,

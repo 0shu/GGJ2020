@@ -37,11 +37,6 @@ namespace GGJ2020
             }
             if (Input.GetKeyDown("3"))
             {
-                currentTool = Tool.Bucket;
-                Interaction();              
-            }
-            if (Input.GetKeyDown("4"))
-            {
                 currentTool = Tool.Weapon;
                 print("Weapon");
                 Interaction();
