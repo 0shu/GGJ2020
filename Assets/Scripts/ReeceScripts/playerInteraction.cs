@@ -5,9 +5,12 @@ using UnityEngine;
 namespace GGJ2020
 {
     public enum Tool { Pickaxe, Hammer, Bucket, Weapon, None };
+
     public class playerInteraction : MonoBehaviour
     {
         public Tool currentTool;
+
+        public Animator m_anim;
 
         public List<GameObject> toolList = new List<GameObject>();
         buildingDetector detector;
@@ -44,6 +47,7 @@ namespace GGJ2020
 
             if (Input.GetMouseButtonDown(0))
             {
+                m_anim.Play("Swing2", 0, 0);
                 if(detector.res != null)
                 {
                     print("!!!");
