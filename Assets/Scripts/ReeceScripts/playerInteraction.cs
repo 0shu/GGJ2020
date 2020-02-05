@@ -47,7 +47,7 @@ namespace GGJ2020
 
             if (Input.GetMouseButtonDown(0))
             {
-                m_anim.Play("Swing2", 0, 0);
+                
                 if(detector.res != null)
                 {
                     print("!!!");
@@ -55,8 +55,11 @@ namespace GGJ2020
                 }
                 if(currentTool == Tool.Weapon)
                 {
+                    m_anim.Play("Stab", 0, 0);
                     this.gameObject.GetComponent<attackEnemy>().AttackEnemy();
                 }
+                else if (currentTool == Tool.Hammer) m_anim.Play("Swing2", 0, 0);
+                else if (currentTool == Tool.Pickaxe) m_anim.Play("Saw", 0, 0);
                 
             }
         }
