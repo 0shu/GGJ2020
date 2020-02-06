@@ -102,8 +102,8 @@ namespace GGJ2020
             if (m_modelIndex == -1) { Debug.Log("Could not find appropriate prefab mesh for building of type " + m_type); }
             else
             {
-                if (m_ruined) { m_currentModel = Instantiate(m_meshes[m_modelIndex].m_ruinedMesh, transform.position, Quaternion.identity) as GameObject; }
-                else { m_currentModel = Instantiate(m_meshes[m_modelIndex].m_repairedMesh, transform.position, Quaternion.identity) as GameObject; }
+                if (m_ruined) { m_currentModel = Instantiate(m_meshes[m_modelIndex].m_ruinedMesh, transform.position, transform.rotation) as GameObject; }
+                else { m_currentModel = Instantiate(m_meshes[m_modelIndex].m_repairedMesh, transform.position, transform.rotation) as GameObject; }
                 m_currentModel.transform.parent = this.transform;
             }
 
@@ -123,7 +123,7 @@ namespace GGJ2020
             m_ruined = true;
 
             GameObject.Destroy(m_currentModel);
-            m_currentModel = Instantiate(m_meshes[m_modelIndex].m_ruinedMesh, transform.position, Quaternion.identity) as GameObject;
+            m_currentModel = Instantiate(m_meshes[m_modelIndex].m_ruinedMesh, transform.position, transform.rotation) as GameObject;
             m_currentModel.transform.parent = this.transform;
         }
         public void Repair()
@@ -133,7 +133,7 @@ namespace GGJ2020
             print("Building repaired.");
 
             GameObject.Destroy(m_currentModel);
-            m_currentModel = Instantiate(m_meshes[m_modelIndex].m_repairedMesh, transform.position, Quaternion.identity) as GameObject;
+            m_currentModel = Instantiate(m_meshes[m_modelIndex].m_repairedMesh, transform.position, transform.rotation) as GameObject;
             m_currentModel.transform.parent = this.transform;
         }
 

@@ -44,6 +44,7 @@ namespace GGJ2020
                 float closestDistSq = 100000000.0f;
                 foreach (var e in Targets)
                 {
+                    if(e == null) Targets.Remove(e);
                     float distSq = (e.transform.position - transform.position).sqrMagnitude;
                     if (distSq < closestDistSq)
                     {
@@ -52,15 +53,21 @@ namespace GGJ2020
                     }
                 }
 
-                float distToEnemy = (nearest.transform.position - transform.position).magnitude;
+                float distToEnemy = (nearest.transform.position - bulletSpawnPoint.transform.position).magnitude;
                 float timeToEnemy = distToEnemy / Bullet.movementSpeed;
 
 
                 Vector3 enemyMovement = nearest.gameObject.GetComponent<NavMeshAgent>().velocity;
                 Vector3 aimPoint = nearest.transform.position + (timeToEnemy * enemyMovement);
 
-                cannon.transform.LookAt(aimPoint);
-                cannon.transform.Rotate(0, 90, 90);
+                {
+                    Vector3 dir = aimPoint - cannon.transform.position;
+                    Quaternion rot = Quaternion.LookRotation(dir);
+                    // slerp to the desired rotation over time
+
+                    cannon.transform.rotation = Quaternion.Slerp(cannon.transform.rotation, rot, 5 * Time.deltaTime);
+                }
+                //cannon.transform.LookAt(aimPoint);
 
                 if (shotReady)
                 {
