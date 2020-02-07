@@ -23,6 +23,7 @@ namespace GGJ2020
         MeshPair[] m_meshes;
 
         int m_modelIndex = -1;
+        [SerializeField]
         GameObject m_currentModel;
 
         // Start is called before the first frame update
@@ -102,6 +103,7 @@ namespace GGJ2020
             if (m_modelIndex == -1) { Debug.Log("Could not find appropriate prefab mesh for building of type " + m_type); }
             else
             {
+                if(m_currentModel != null) GameObject.Destroy(m_currentModel);
                 if (m_ruined) { m_currentModel = Instantiate(m_meshes[m_modelIndex].m_ruinedMesh, transform.position, transform.rotation) as GameObject; }
                 else { m_currentModel = Instantiate(m_meshes[m_modelIndex].m_repairedMesh, transform.position, transform.rotation) as GameObject; }
                 m_currentModel.transform.parent = this.transform;
