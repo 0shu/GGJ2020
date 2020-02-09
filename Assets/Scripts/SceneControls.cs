@@ -15,7 +15,8 @@ namespace GGJ2020 {
 
         void Start()
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            if(m_enabled) Cursor.lockState = CursorLockMode.None;
+            else Cursor.lockState = CursorLockMode.Locked;
         }
 
         void Update()

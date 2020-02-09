@@ -48,7 +48,7 @@ namespace GGJ2020
         {
             yield return new WaitForSeconds(checkInterval);
             m_objectiveCheckTrigger = true;
-            print("Triggered enemycheck");
+            //print("Triggered enemycheck");
         }
         void Start()
         {
@@ -85,10 +85,6 @@ namespace GGJ2020
 
         void FixedUpdate()
         {
-            if (m_agent == null)
-            {
-
-            }
 
             if (m_objectiveCheckTrigger)
             {
@@ -106,19 +102,17 @@ namespace GGJ2020
                 }
                 else if (nearestBuilding != null && ((nearestBuilding.transform.position - transform.position).sqrMagnitude) <= (lookRadius * lookRadius))
                 {
-                    print("Triggering Attacking Building");
+                    //print("Triggering Attacking Building");
 
                     distanceToBuilding = Vector3.Distance(transform.position, nearestBuilding.transform.position);
                     if(distanceToBuilding <= 10f)
                     {
-
                         //Explode();
                         TriggerFuse();
-                        nearestBuilding.gameObject.GetComponent<BuildingDamage>().takeDamage(8f);
                     }
                     m_state = EnemyState.AttackingBuilding;
                     //m_currentTarget = nearestBuilding.transform.position;
-                    m_agent.SetDestination(new Vector3(nearestBuilding.transform.position.x,
+                    if(m_agent.isOnNavMesh) m_agent.SetDestination(new Vector3(nearestBuilding.transform.position.x,
                                                         0f,
                                                         nearestBuilding.transform.position.z));
 
@@ -130,7 +124,7 @@ namespace GGJ2020
                     {
                         m_state = EnemyState.MovingToLocation;
                         m_currentTarget = m_longTermTarget;
-                        m_agent.SetDestination(m_currentTarget);
+                        if(m_agent.isOnNavMesh) m_agent.SetDestination(m_currentTarget);
 
                     }
                     else
@@ -138,8 +132,8 @@ namespace GGJ2020
                         m_state = EnemyState.Idle;
                         m_longTermTarget = this.transform.position;
                         m_currentTarget = m_longTermTarget;
-                        m_agent.SetDestination(m_currentTarget);
-                        print("Triggering idle");
+                        if(m_agent.isOnNavMesh) m_agent.SetDestination(m_currentTarget);
+                        //print("Triggering idle");
                     }
                 }
 
@@ -152,7 +146,7 @@ namespace GGJ2020
             {
                 case EnemyState.AttackingPlayer:
                     m_currentTarget = player.position;
-                    m_agent.SetDestination(m_currentTarget);
+                    if(m_agent.isOnNavMesh) m_agent.SetDestination(m_currentTarget);
                     goingToPlayer = true;
                     break;
                 case EnemyState.AttackingBuilding:
@@ -227,7 +221,7 @@ namespace GGJ2020
         public void Explode()
         {
             audio.Play();
-            print("Exploding");
+            //print("Exploding");
             m_agent.enabled = false;
             m_objectiveCheckTrigger = false;
             m_state = EnemyState.Exploading; 
@@ -251,6 +245,9 @@ namespace GGJ2020
                     var pc = nearbyObject.GetComponent<playerController>();
                     if (pc != null) { pc.takeDamage(10f); }
                 }
+
+                BuildingDamage bd = nearbyObject.GetComponent<BuildingDamage>();
+                if(bd != null) bd.takeDamage(1f);
             }
             //minerigid.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             StartCoroutine(Reenable());
@@ -276,7 +273,7 @@ namespace GGJ2020
         IEnumerator ReenableNavMesh()
         {
             m_agent.enabled = false;
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(10f);
             m_agent.enabled = true;
         }
     }

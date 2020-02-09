@@ -123,6 +123,7 @@ namespace GGJ2020
         {
             ResourceManager.RemoveBuilding(m_type, this);
             m_ruined = true;
+            print("Building ruined.");
 
             GameObject.Destroy(m_currentModel);
             m_currentModel = Instantiate(m_meshes[m_modelIndex].m_ruinedMesh, transform.position, transform.rotation) as GameObject;

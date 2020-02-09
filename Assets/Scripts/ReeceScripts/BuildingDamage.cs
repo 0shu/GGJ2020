@@ -18,6 +18,7 @@ namespace GGJ2020
 
         public void takeDamage(float Damage)
         {
+            print("Building has taken damage!");
             if (BuildingHealth - Damage >= 1)
             {
                 BuildingHealth -= Damage;

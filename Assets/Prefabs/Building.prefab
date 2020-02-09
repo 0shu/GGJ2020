@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6038068740344460055}
   - component: {fileID: 120105602758015157}
   - component: {fileID: 4073835312724750884}
+  - component: {fileID: 3485357700563643014}
   m_Layer: 0
   m_Name: Building
   m_TagString: Resource
@@ -158,6 +159,7 @@ MonoBehaviour:
       type: 3}
     m_repairedMesh: {fileID: 3066359972531461590, guid: 590112679e92d0447846531d8039dbbb,
       type: 3}
+  m_currentModel: {fileID: 0}
 --- !u!65 &120105602758015157
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -199,6 +201,19 @@ MonoBehaviour:
     m_weight: 1.2
   m_minSpawncount: 10
   m_maxSpawncount: 15
+--- !u!114 &3485357700563643014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999581615592402352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a0780df6ae4a0e46892953c2e0a397d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuildingHealth: 5
 --- !u!1 &1781959538874706056
 GameObject:
   m_ObjectHideFlags: 0

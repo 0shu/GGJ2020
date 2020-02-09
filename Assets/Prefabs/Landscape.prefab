@@ -11,11 +11,10 @@ GameObject:
   - component: {fileID: 5925648779038003642}
   - component: {fileID: 3415739062009899916}
   - component: {fileID: 8960947194585503605}
-  - component: {fileID: 4374721380774395072}
   - component: {fileID: 8296172668396962697}
   m_Layer: 0
   m_Name: Landscape
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -81,25 +80,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &4374721380774395072
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7234887612784141225}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 89f41b1e030f1804188eeb7739ca9141, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!64 &8296172668396962697
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -112,5 +92,5 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: -1
   m_Mesh: {fileID: -462981019419857548, guid: 2ab0b382a7942cb4f8bcc719911bee02, type: 3}
