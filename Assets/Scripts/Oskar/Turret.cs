@@ -21,6 +21,7 @@ namespace GGJ2020
         public GameObject bullet;
         public GameObject bulletSpawnPoint;
         public ParticleSystem particleLauncher;
+        public AudioSource audio;
 
         // Start is called before the first frame update
         void Start()
@@ -82,6 +83,7 @@ namespace GGJ2020
 
         void Shoot()
         {
+            audio.Play();
             Transform _bullet = Instantiate(bullet.transform, bulletSpawnPoint.transform.position, Quaternion.identity);
             particleLauncher.Emit(1);
             _bullet.transform.rotation = bulletSpawnPoint.transform.rotation;

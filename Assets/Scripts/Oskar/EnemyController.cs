@@ -32,6 +32,7 @@ namespace GGJ2020
         public float explosionForce = 700f;
 
         public GameObject explosionEffect;
+        public AudioSource audio;
         private Transform player;
 
         Vector3 m_currentTarget;
@@ -225,7 +226,8 @@ namespace GGJ2020
 
         public void Explode()
         {
-            print("Exploding)");
+            audio.Play();
+            print("Exploding");
             m_agent.enabled = false;
             m_objectiveCheckTrigger = false;
             m_state = EnemyState.Exploading; 

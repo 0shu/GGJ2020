@@ -21,7 +21,7 @@ namespace GGJ2020
 
         public float normalFOV = 60f;
         public float fastFOV = 80f;
-        public float FOVZoomSpeed = 10f;
+        public float FOVZoomSpeed = 20f;
         public bool isLerping = false;
 
         public bool isRunning = false;

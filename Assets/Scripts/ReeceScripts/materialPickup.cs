@@ -57,6 +57,7 @@ namespace GGJ2020
         {
             if(coll.CompareTag("Player"))
             {
+                AudioManager.s_instance.PlayPop();
                 ResourceManager.ChangeResource(m_type, 1);
                 Destroy(this.gameObject);
             }
