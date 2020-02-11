@@ -71,6 +71,7 @@ namespace GGJ2020
 
         [SerializeField] int[] m_buildingCounts = new int[BuildingTypeCount];
         List<Building>[] m_activeBuildings = new List<Building>[BuildingTypeCount];
+        float m_furthestActiveBuildingRadius = 0.0f; // How far from the centre the furthest activated building is. Used for enemy wave spawning.
 
         private class InternalBYP
         {
@@ -225,12 +226,30 @@ namespace GGJ2020
         {
             s_instance.m_buildingCounts[(int)type]++;
             s_instance.m_activeBuildings[(int)type].Add(building);
-        }
 
+            float distSq = building.transform.position.sqrMagnitude;
+            if (distSq > (s_instance.m_furthestActiveBuildingRadius * s_instance.m_furthestActiveBuildingRadius)) { s_instance.m_furthestActiveBuildingRadius = Mathf.Sqrt(distSq); }
+        }
         static public void RemoveBuilding(BuildingTypes type, Building building)
         {
+            float distSq = building.transform.position.sqrMagnitude;
+            
             s_instance.m_buildingCounts[(int)type]--;
             s_instance.m_activeBuildings[(int)type].Remove(building);
+
+            if (distSq > (s_instance.m_furthestActiveBuildingRadius * s_instance.m_furthestActiveBuildingRadius) - 1.0f) { s_instance.updateFurthestActiveBuilding(); }
+        }
+        void updateFurthestActiveBuilding()
+        {
+            s_instance.m_furthestActiveBuildingRadius = 0.0f;
+            foreach (var lob in m_activeBuildings)
+            {
+                foreach (var b in lob)
+                {
+                    float distSq = b.transform.position.sqrMagnitude;
+                    if (distSq > (s_instance.m_furthestActiveBuildingRadius * s_instance.m_furthestActiveBuildingRadius)) { m_furthestActiveBuildingRadius = b.transform.position.magnitude; }
+                }
+            }
         }
         static public Building GetClosestActiveBuildingTo(Vector3 position)
         {
@@ -254,12 +273,12 @@ namespace GGJ2020
             if (!foundAny) { return null; }
             else { return closestYet; }
         }
+        static public float GetFurthestActiveBuildingRadius() { return s_instance.m_furthestActiveBuildingRadius; }
 
         static public int GetResourceCount(ResourceTypes type)
         {
             return s_instance.m_resources[(int)type];
         }
-
         static public void ChangeResource(ResourceTypes type, int delta)
         {
             s_instance.m_resources[(int)type] = Mathf.Max(0, s_instance.m_resources[(int)type] + delta);
@@ -289,7 +308,6 @@ namespace GGJ2020
 
             return output;
         }
-
         static public RuntimeBuildingYieldProfile GetCurrentYields(BuildingTypes type)
         {
             RuntimeBuildingYieldProfile output = new RuntimeBuildingYieldProfile();
@@ -307,5 +325,7 @@ namespace GGJ2020
 
             return output;
         }
+
+        //static public float GetApproxMaxTerrainHeightAtPos(Vector3 position)
     }
 }
