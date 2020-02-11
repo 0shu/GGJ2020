@@ -6,7 +6,10 @@ public class KillBox : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("KillBox killed: " + other.gameObject.name);
-        GameObject.Destroy(other.gameObject);
+        if(other.gameObject.tag != "Player")
+        {
+            Debug.Log("KillBox killed: " + other.gameObject.name);
+            GameObject.Destroy(other.gameObject);
+        }
     }
 }
