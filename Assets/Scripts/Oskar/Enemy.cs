@@ -11,6 +11,9 @@ namespace GGJ2020
         private GameObject turret;
         public void takeDamage(float Damage)
         {
+            EnemyController contr = gameObject.GetComponent<EnemyController>();
+            contr.InterruptSound(2);
+
             if (currentHealth - Damage >= 1)
             {
                 currentHealth -= Damage;
@@ -40,8 +43,9 @@ namespace GGJ2020
                         turret.GetComponent<Turret>().Targets.Remove(this);
                     }
                 }
-                this.gameObject.GetComponent<EnemyController>().TriggerFuse();
-                Destroy(this.gameObject);
+                contr.TriggerFuse();
+                gameObject.GetComponent<MeshCollider>().enabled = false;
+                Destroy(this.gameObject, contr.m_sounds[2].length);
 
             }
 

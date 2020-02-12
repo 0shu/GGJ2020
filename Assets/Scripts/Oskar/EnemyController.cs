@@ -33,7 +33,7 @@ namespace GGJ2020
 
         public GameObject explosionEffect;
         public AudioSource audio;
-        public AudioSource baa;
+        public List<AudioClip> m_sounds;
         private Transform player;
 
         Vector3 m_currentTarget;
@@ -58,7 +58,7 @@ namespace GGJ2020
             m_longTermTarget = this.transform.position;
             m_currentTarget = m_longTermTarget;
             StartCoroutine(ReenableNavMesh());
-    }
+        }
 
         void Update()
         {
@@ -73,6 +73,34 @@ namespace GGJ2020
             }
 
             
+        }
+
+        public void InterruptSound(int sound)
+        {
+            audio.clip = m_sounds[sound];
+            audio.Play();
+        }
+
+        public void QueueSound(int sound)
+        {
+            if(m_sounds.Count > sound)
+            {
+                if(audio.isPlaying)
+                {
+                    float delay = audio.clip.length - audio.time;
+                    audio.clip = m_sounds[sound];
+                    audio.PlayDelayed(delay);
+                }
+                else
+                {
+                    audio.clip = m_sounds[sound];
+                    audio.Play();
+                }
+            }
+            else
+            {
+                Debug.Log("Not Enough sounds on enemy to play specified piece! " + sound + " vs " + m_sounds.Count);
+            }
         }
 
         public void TriggerFuse()
@@ -94,7 +122,10 @@ namespace GGJ2020
                 var nearestBuilding = ResourceManager.GetClosestActiveBuildingTo(transform.position);
                 if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
                 {
-                    if(m_state != EnemyState.AttackingPlayer) baa.Play();
+                    if(m_state != EnemyState.AttackingPlayer) 
+                    {
+                        QueueSound(1);
+                    }
                     m_state = EnemyState.AttackingPlayer;
                     
                     
@@ -222,7 +253,7 @@ namespace GGJ2020
 
         public void Explode()
         {
-            audio.Play();
+            InterruptSound(0);
             //print("Exploding");
             m_agent.enabled = false;
             m_objectiveCheckTrigger = false;
