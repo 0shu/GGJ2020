@@ -13,6 +13,7 @@ namespace GGJ2020
         {
             EnemyController contr = gameObject.GetComponent<EnemyController>();
             contr.InterruptSound(2);
+            contr.Hurt();
 
             if (currentHealth - Damage >= 1)
             {
@@ -43,9 +44,7 @@ namespace GGJ2020
                         turret.GetComponent<Turret>().Targets.Remove(this);
                     }
                 }
-                contr.TriggerFuse();
-                gameObject.GetComponent<MeshCollider>().enabled = false;
-                Destroy(this.gameObject, contr.m_sounds[2].length);
+                contr.Die();
 
             }
 

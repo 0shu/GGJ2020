@@ -30,10 +30,12 @@ namespace GGJ2020
         public float explosionDelay = 2f;
         public float explosionRadius = 15f;
         public float explosionForce = 700f;
+        public float hurtFrameLength = 0.1f;
 
         public GameObject explosionEffect;
         public AudioSource audio;
         public List<AudioClip> m_sounds;
+        public List<Material> m_materials;
         private Transform player;
 
         Vector3 m_currentTarget;
@@ -42,6 +44,8 @@ namespace GGJ2020
         NavMeshAgent m_agent;
         bool m_aggressive = false;
         bool goingToPlayer = false;
+        bool hurting = false;
+        bool dying = false;
 
         private float distanceToBuilding;
 
@@ -248,7 +252,28 @@ namespace GGJ2020
 
         public void Die()
         {
-            Destroy(this.gameObject);
+            InterruptSound(2);
+            gameObject.GetComponent<MeshCollider>().enabled = false;
+            dying = true;
+            if(!hurting) gameObject.GetComponent<MeshRenderer>().material = m_materials[2];
+            Destroy(m_agent);
+            Destroy(this.gameObject, m_sounds[2].length);
+        }
+
+        public void Hurt()
+        {
+            if(hurting) StopCoroutine(HurtFrame());
+            StartCoroutine(HurtFrame());
+        }
+
+        IEnumerator HurtFrame()
+        {
+            hurting = true;
+            gameObject.GetComponent<MeshRenderer>().material = m_materials[1];
+            yield return new WaitForSeconds(hurtFrameLength);
+            if(dying) gameObject.GetComponent<MeshRenderer>().material = m_materials[2];
+            else if(hurting) gameObject.GetComponent<MeshRenderer>().material = m_materials[0];
+            hurting = false;
         }
 
         public void Explode()
