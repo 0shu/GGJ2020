@@ -33,6 +33,7 @@ namespace GGJ2020
 
         public GameObject explosionEffect;
         public AudioSource audio;
+        public AudioSource baa;
         private Transform player;
 
         Vector3 m_currentTarget;
@@ -93,6 +94,7 @@ namespace GGJ2020
                 var nearestBuilding = ResourceManager.GetClosestActiveBuildingTo(transform.position);
                 if (sqrDistanceToPlayer <= (lookRadius * lookRadius))
                 {
+                    if(m_state != EnemyState.AttackingPlayer) baa.Play();
                     m_state = EnemyState.AttackingPlayer;
                     
                     

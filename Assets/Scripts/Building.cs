@@ -23,8 +23,9 @@ namespace GGJ2020
         MeshPair[] m_meshes;
 
         int m_modelIndex = -1;
-        [SerializeField]
-        GameObject m_currentModel;
+        [SerializeField] GameObject m_currentModel;
+        [SerializeField] AudioSource m_fixSound;
+        [SerializeField] AudioSource m_breakSound;
 
         // Start is called before the first frame update
         new void Start()
@@ -122,6 +123,7 @@ namespace GGJ2020
         public void Ruin()
         {
             ResourceManager.RemoveBuilding(m_type, this);
+            if(m_breakSound) m_breakSound.Play();
             m_ruined = true;
             print("Building ruined.");
 
@@ -132,6 +134,7 @@ namespace GGJ2020
         public void Repair()
         {
             ResourceManager.AddBuilding(m_type, this);
+            if(m_fixSound) m_fixSound.Play();
             m_ruined = false;
             print("Building repaired.");
 
@@ -150,7 +153,17 @@ namespace GGJ2020
             {
                 drops.spawnFromMaterial(transform.position);
                 player.RemoveResourceFromWatch(this);
-                GameObject.Destroy(this.gameObject);
+                if(m_breakSound)
+                {
+                    m_breakSound.Play();
+                    GameObject.Destroy(m_currentModel);
+                    GameObject.Destroy(m_gatherUIWrapper);
+                    GameObject.Destroy(m_repairUIWrapper);
+                    GameObject.Destroy(m_runningUIWrapper);
+                    GameObject.Destroy(this.gameObject, m_breakSound.clip.length);
+                }
+                else GameObject.Destroy(this.gameObject);
+                
             }
             else if (player.currentTool == repairTool)
             {

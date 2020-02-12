@@ -10005,6 +10005,11 @@ PrefabInstance:
       propertyPath: fastFOV
       value: 80
       objectReference: {fileID: 0}
+    - target: {fileID: 8413821185090307222, guid: 3a5691143fe91be49b0c6a700a9d68ca,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a5691143fe91be49b0c6a700a9d68ca, type: 3}
 --- !u!1001 &441057853

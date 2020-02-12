@@ -117,6 +117,7 @@ namespace GGJ2020
         {
             Debug.Log("PH-" + playerhealth + " Damage-" + Damage);
 
+            AudioManager.s_instance.PlayHurt();
             playerhealth = Mathf.Max(0.0f, playerhealth - Damage);
 
             statusBars.SetHealth(playerhealth / maxHealth);
