@@ -253,10 +253,11 @@ namespace GGJ2020
         public void Die()
         {
             InterruptSound(2);
+            gameObject.GetComponent<BoxCollider>().enabled = false;
             gameObject.GetComponent<MeshCollider>().enabled = false;
             dying = true;
             if(!hurting) gameObject.GetComponent<MeshRenderer>().material = m_materials[2];
-            Destroy(m_agent);
+            m_agent.enabled = false;
             Destroy(this.gameObject, m_sounds[2].length);
         }
 

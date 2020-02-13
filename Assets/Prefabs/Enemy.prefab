@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8469352507629219970}
   - component: {fileID: 8469352507629219969}
   - component: {fileID: 4444785116586905487}
+  - component: {fileID: 3719985903353223076}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -98,9 +99,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!64 &8469352507629219980
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -110,10 +111,10 @@ MeshCollider:
   m_GameObject: {fileID: 6560297476276996936}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: -1
   m_Mesh: {fileID: -8391712784951336479, guid: 9ea4bcaea7e806c42ba8b0aa2adf9a48, type: 3}
 --- !u!195 &8469352507629219971
 NavMeshAgent:
@@ -169,6 +170,7 @@ MonoBehaviour:
   explosionDelay: 2
   explosionRadius: 15
   explosionForce: 700
+  hurtFrameLength: 0.1
   explosionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
   audio: {fileID: 4444785116586905487}
@@ -285,3 +287,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &3719985903353223076
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560297476276996936}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.45994198, y: 0.8968866, z: 1.126116}
+  m_Center: {x: -0.025421709, y: 0.45076823, z: 0.024655461}

@@ -160,6 +160,7 @@ namespace GGJ2020
                     GameObject.Destroy(m_gatherUIWrapper);
                     GameObject.Destroy(m_repairUIWrapper);
                     GameObject.Destroy(m_runningUIWrapper);
+                    deleteFlag = true;
                     GameObject.Destroy(this.gameObject, m_breakSound.clip.length);
                 }
                 else GameObject.Destroy(this.gameObject);

@@ -46,12 +46,16 @@ namespace GGJ2020
                 foreach (var e in Targets)
                 {
                     if(e == null) Targets.Remove(e);
-                    float distSq = (e.transform.position - transform.position).sqrMagnitude;
-                    if (distSq < closestDistSq)
+                    else
                     {
-                        nearest = e;
-                        closestDistSq = distSq;
+                        float distSq = (e.transform.position - transform.position).sqrMagnitude;
+                        if (distSq < closestDistSq)
+                        {
+                            nearest = e;
+                            closestDistSq = distSq;
+                        }
                     }
+                    
                 }
 
                 float distToEnemy = (nearest.transform.position - bulletSpawnPoint.transform.position).magnitude;

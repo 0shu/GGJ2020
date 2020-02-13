@@ -28,7 +28,7 @@ namespace GGJ2020
                 // TODO: Update to level size.
                 Vector3 position = new Vector3(Random.Range(-500, 500), 0.0f, Random.Range(-500, 500));
                 // TODO: Change with getting height of relevant tile.
-                position.y = 30.0f;
+                position.y = 0.0f;
                 SpawnFlock(position);
             }
 
@@ -38,7 +38,7 @@ namespace GGJ2020
                 // TODO: Update to level size.
                 Vector3 position = new Vector3(Random.Range(-500, 500), 0.0f, Random.Range(-500, 500));
                 // TODO: Change with getting height of relevant tile.
-                position.y = 30.0f;
+                position.y = 0.0f;
                 SpawnFlock(position, true);
             }
 
@@ -58,7 +58,7 @@ namespace GGJ2020
                     Vector3 position = new Vector3(Mathf.Cos(angle), 0.0f, Mathf.Sin(angle));
                     position *= radius;
                     // TODO: Change with getting height of relevant tile.
-                    position.y = 30.0f;
+                    position.y = 0.0f;
 
                     SpawnFlock(position, true, new Vector3(0.0f, 0.0f, 0.0f));
                 }

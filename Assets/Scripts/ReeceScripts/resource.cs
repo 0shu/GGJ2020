@@ -32,7 +32,7 @@ namespace GGJ2020
 
         public GameObject m_runningUIWrapper;
 
-        bool deleteFlag = false;
+        protected bool deleteFlag = false;
 
         MeshFilter mRenderer;
 
@@ -54,7 +54,7 @@ namespace GGJ2020
         }
         protected void Update()
         {
-            if (m_uiActive)
+            if (m_uiActive && !deleteFlag)
             {
                 if (player.currentTool == gatherTool && drops != null)
                 {
