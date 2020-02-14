@@ -176,4 +176,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_prefabs: []
   m_tileGridSize: {x: 32, y: 32}
-  m_tileHeightLimits: {x: -2, y: 16}
+  m_tileHeightLimits: {x: -2, y: 12}
