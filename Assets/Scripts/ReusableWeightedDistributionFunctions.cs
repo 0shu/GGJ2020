@@ -59,7 +59,7 @@ namespace GGJ2020
                     found = true;
                     segmentSelection = i;
 
-                    float prop = (nextRunningTotal - runningTotal) / values[i + 1];
+                    float prop = (segmentSelectionVal - runningTotal) / values[i + 1];
                     return ((prop * (values[i + 2] - values[i])) + values[i]);
                 }
                 runningTotal = nextRunningTotal;
@@ -104,7 +104,7 @@ namespace GGJ2020
                     found = true;
                     segmentSelection = i;
 
-                    float prop = (nextRunningTotal - runningTotal) / slots[i].m_weight;
+                    float prop = (segmentSelectionVal - runningTotal) / slots[i].m_weight;
                     return ((prop * (slots[i].m_max - slots[i].m_min)) + slots[i].m_min);
                 }
                 runningTotal = nextRunningTotal;
@@ -115,7 +115,92 @@ namespace GGJ2020
             return Random.Range(slots[segmentSelection].m_min, slots[segmentSelection].m_max);
         }
 
-        // TODO:
-        //static public float RandomValueFromHistogram(Vector2 limits, params float[] weights)
+        // Returns a random value with a weighting derived from histogram generated from points given. Starts with pair of upper and lower bounds (inclusive, exclusive), splits intermediate range into number of segments equal to input floats, weights each segment according to corresponsing float.
+        static public float RandomValueFromHistogram(Vector2 limits, params float[] weights)
+        {
+            if (limits.x == limits.y) { return limits.x; }
+            if (limits.x > limits.y) { limits = new Vector2(limits.y, limits.x); }
+
+            float range = limits.y - limits.x;
+            float segmentSize = range / weights.Length;
+            float totalWeight = 0.0f;
+            foreach (var w in weights) { totalWeight += w; }
+
+            if (totalWeight <= 0.0f)
+            {
+                Debug.LogError("Misuse of WeightedDistributions.RandomValueFromHistogram(), total weight is equal to or less than zero.");
+                return 0.0f;
+            }
+
+            uint segmentSelection = 0;
+
+            float segmentSelectionVal = totalWeight;
+            while (segmentSelectionVal == totalWeight) { segmentSelectionVal = Random.Range(0.0f, totalWeight); } // Ensure that it excludes the highest possible value. Important to avoid tiny chance of out-of-bounds issues.
+
+            float runningTotal = 0.0f;
+            bool found = false;
+            for (uint i = 0; i < weights.Length && !found; i++)
+            {
+                float nextRunningTotal = runningTotal + weights[i];
+                if (nextRunningTotal > segmentSelectionVal)
+                {
+                    found = true;
+                    segmentSelection = i;
+
+                    float prop = (segmentSelectionVal - runningTotal) / weights[i];
+                    return (((float)i + prop) * segmentSize);
+                }
+                runningTotal = nextRunningTotal;
+            }
+
+            Debug.LogWarning("An instruction that should never be reached has been executed in WeightedDistributions.RandomValueFromHistogram().");
+
+            return Random.Range(((float)segmentSelection * segmentSize), (((float)segmentSelection + 1.0f) * segmentSize));
+
+        }
+
+        // Returns a random value with a weighting derived from histogram generated from points given. Starts with pair of upper and lower bounds (inclusive, exclusive), splits intermediate range into number of segments equal to input floats, weights each segment according to corresponsing float.
+        static public float RandomValueFromHistogram(Vector2 limits, List<float> weights)
+        {
+            if (limits.x == limits.y) { return limits.x; }
+            if (limits.x > limits.y) { limits = new Vector2(limits.y, limits.x); }
+
+            float range = limits.y - limits.x;
+            float segmentSize = range / weights.Count;
+            float totalWeight = 0.0f;
+            foreach (var w in weights) { totalWeight += w; }
+
+            if (totalWeight <= 0.0f)
+            {
+                Debug.LogError("Misuse of WeightedDistributions.RandomValueFromHistogram(), total weight is equal to or less than zero.");
+                return 0.0f;
+            }
+
+            int segmentSelection = 0;
+
+            float segmentSelectionVal = totalWeight;
+            while (segmentSelectionVal == totalWeight) { segmentSelectionVal = Random.Range(0.0f, totalWeight); } // Ensure that it excludes the highest possible value. Important to avoid tiny chance of out-of-bounds issues.
+
+            float runningTotal = 0.0f;
+            bool found = false;
+            for (int i = 0; i < weights.Count && !found; i++)
+            {
+                float nextRunningTotal = runningTotal + weights[i];
+                if (nextRunningTotal > segmentSelectionVal)
+                {
+                    found = true;
+                    segmentSelection = i;
+
+                    float prop = (segmentSelectionVal - runningTotal) / weights[i];
+                    return ((((float)i + prop) * segmentSize) + limits.x);
+                }
+                runningTotal = nextRunningTotal;
+            }
+
+            Debug.LogWarning("An instruction that should never be reached has been executed in WeightedDistributions.RandomValueFromHistogram().");
+
+            return (Random.Range(((float)segmentSelection * segmentSize), (((float)segmentSelection + 1.0f) * segmentSize))+limits.x);
+
+        }
     }
 }
