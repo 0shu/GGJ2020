@@ -1,5 +1,6 @@
-<img src = "/Assets/Art/HiResFlag.png" width="400">
 # Tool Britannia
+
+<img src = "/Assets/Art/HiResFlag.png" width="400"></img>
 
 Made for the Global Game Jam 2020 by students at De Montfort University
 
